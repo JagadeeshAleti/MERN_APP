@@ -1,41 +1,30 @@
 const User = require("../models/User");
+const joi = require("joi");
+const pwdRegex =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
-const emailValidator = require("email-validator");
-const passwordValidator = require("password-validator");
+const schema = joi.object({
+  email: joi.string().min(3).required().email(),
+  username: joi.string().min(3).alphanum(),
+  password: joi.string().regex(pwdRegex),
+  confirmPassword: joi.string().regex(pwdRegex),
+});
 
 module.exports.registerValidations = async (req, res, next) => {
   const { email, username, password, confirmPassword } = req.body;
 
-  const isvalidEmail = emailValidator.validate(email);
-  if (!isvalidEmail) {
-    return res.send({ msg: "Not a valid Email" });
-  }
+  const isValidUser = schema.validate({
+    email,
+    username,
+    password,
+    confirmPassword,
+  });
 
-  const passwordSchema = new passwordValidator();
-  passwordSchema
-    .is()
-    .min(8)
-    .is()
-    .max(100)
-    .has()
-    .uppercase()
-    .has()
-    .lowercase()
-    .has()
-    .digits(2)
-    .has()
-    .not()
-    .spaces()
-    .is()
-    .not()
-    .oneOf(["Passw0rd", "Password123"]);
-
-  const isValidPwd =
-    passwordSchema.validate(password) &&
-    passwordSchema.validate(confirmPassword);
-
-  if (!isValidPwd) {
-    return res.send({ msg: "Not a valid password" });
+  if (!!isValidUser.error) {
+    return res.send({
+      msg: "Invalid email or password",
+      // isValidUser.error?.details?.map((d) => d.message)?.join(","),
+    });
   }
 
   if (!(password === confirmPassword)) {

@@ -1,8 +1,25 @@
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Button, TextField } from "@mui/material";
+import axios from "axios";
+import joi from "joi";
 import { useState } from "react";
-import { borderLeft } from "@mui/system";
+
+const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+const schema = joi.object({
+  email: joi
+    .string()
+    .min(3)
+    .required()
+    .email({ tlds: false }),
+  username: joi
+    .string()
+    .min(3)
+    .alphanum(),
+  password: joi.string().regex(pwdRegex),
+  confirmPassword: joi.string().regex(pwdRegex),
+});
 
 const register = () => {
   const [email, setEmail] = useState();
@@ -10,8 +27,31 @@ const register = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
-  const onSubmitHandler = () => {
-    console.log(email, password);
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const isValidUser = schema.validate({
+      email,
+      username,
+      password,
+      confirmPassword,
+    });
+
+    console.log(isValidUser);
+    const user = {
+      username,
+      email,
+      password,
+      confirmPassword,
+    };
+
+    axios
+      .post("http://localhost:5000/api/user/register", user)
+      .then((res) => console.log(res.data));
+
+    // setEmail("");
+    // setUsername("");
+    // setPassword("");
+    // setConfirmPassword("");
   };
 
   return (
