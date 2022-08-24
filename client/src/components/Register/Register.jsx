@@ -118,7 +118,7 @@ const register = () => {
       </Grid>
       <Grid item xs={12}>
         <Button fullWidth onClick={onSubmitHandler} variant="contained">
-          Contained
+          Register
         </Button>
       </Grid>
     </Grid>
