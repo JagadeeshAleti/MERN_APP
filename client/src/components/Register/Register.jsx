@@ -44,10 +44,12 @@ const register = () => {
       confirmPassword,
     };
 
-    axios
-      .post("http://localhost:5000/api/user/register", user)
-      .then((res) => console.log(res.data));
-
+    try {
+      const res = axios.post("http://localhost:5000/api/user/register", user);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
     // setEmail("");
     // setUsername("");
     // setPassword("");

@@ -1,6 +1,8 @@
 import { Grid, TextField, Typography, Button } from "@mui/material";
 import React from "react";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
 import joi from "joi";
 import axios from "axios";
 
@@ -14,19 +16,35 @@ const schema = joi.object({
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const navigate = useNavigate();
+  const [token, setToken] = useState();
 
-  const isValidUser = schema.validate({
-    email,
-  });
-
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/api/user/login", { email, password })
-      .then((res) => console.log(res.data));
 
-    console.log(email, password);
+    const isValidUser = schema.validate({
+      email,
+    });
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/user/login", {
+        email,
+        password,
+      });
+
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/home");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  if (localStorage.getItem("token")) {
+    console.log(localStorage.getItem("token"));
+    return <Navigate replace to="/home" />;
+  }
 
   return (
     <Grid container item xs={12} sm={4} m="auto" rowGap={2} mt={"10%"}>
