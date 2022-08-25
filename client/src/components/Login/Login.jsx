@@ -2,6 +2,7 @@ import { Grid, TextField, Typography, Button } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import joi from "joi";
+import axios from "axios";
 
 const schema = joi.object({
   email: joi
@@ -9,9 +10,6 @@ const schema = joi.object({
     .min(3)
     .required()
     .email({ tlds: false }),
-  password: joi
-    .string()
-    .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/),
 });
 const Login = () => {
   const [email, setEmail] = useState();
@@ -19,13 +17,14 @@ const Login = () => {
 
   const isValidUser = schema.validate({
     email,
-    password,
   });
-
-  console.log(isValidUser);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    axios
+      .post("http://localhost:5000/api/user/login", { email, password })
+      .then((res) => console.log(res.data));
+
     console.log(email, password);
   };
 
@@ -58,6 +57,7 @@ const Login = () => {
         <TextField
           fullWidth
           color="primary"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           id="outlined-basic"
