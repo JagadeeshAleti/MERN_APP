@@ -1,9 +1,10 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Box, LinearProgress } from "@mui/material";
 import axios from "axios";
 import joi from "joi";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -26,8 +27,11 @@ const register = () => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
   const onSubmitHandler = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const isValidUser = schema.validate({
       email,
@@ -45,15 +49,12 @@ const register = () => {
     };
 
     try {
-      const res = axios.post("http://localhost:5000/api/user/register", user);
+      const res = axios.post("http://localhost:5001/api/user/register", user);
       console.log(res);
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }
-    // setEmail("");
-    // setUsername("");
-    // setPassword("");
-    // setConfirmPassword("");
   };
 
   return (
@@ -123,6 +124,11 @@ const register = () => {
           Register
         </Button>
       </Grid>
+      {isLoading && (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      )}
     </Grid>
   );
 };

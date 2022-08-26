@@ -1,4 +1,11 @@
-import { Grid, TextField, Typography, Button } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Box,
+  LinearProgress,
+} from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -16,27 +23,29 @@ const schema = joi.object({
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [token, setToken] = useState();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
     const isValidUser = schema.validate({
       email,
     });
-
+    console.log(isValidUser);
     try {
-      const res = await axios.post("http://localhost:5000/api/user/login", {
+      setIsLoading(true);
+      const res = await axios.post("http://localhost:5001/api/user/login", {
         email,
         password,
       });
 
+      setIsLoading(false);
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
         navigate("/home");
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
@@ -88,6 +97,11 @@ const Login = () => {
           Login
         </Button>
       </Grid>
+      {isLoading && (
+        <Box sx={{ width: "100%" }}>
+          <LinearProgress />
+        </Box>
+      )}
     </Grid>
   );
 };
