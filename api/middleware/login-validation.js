@@ -12,9 +12,8 @@ module.exports.loginValidations = async (req, res, next) => {
 
   console.log(isValidSchema);
   if (isValidSchema.error) {
-    return res.send({
-      msg: "Invalid email",
-      // isValidSchema.error?.details?.map((d) => d.message)?.join(","),
+    return res.status(400).send({
+      err: "Invalid email",
     });
   }
 
