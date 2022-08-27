@@ -39,12 +39,12 @@ router.post("/login", [loginValidations], async (req, res) => {
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(400).json({ msg: "No user exists with this mail" });
+      return res.status(400).json({ err: "No user exists with this mail" });
     }
 
     const valid = await bcrypt.compare(req.body.password, user.password);
     if (!valid) {
-      return res.status(400).json({ msg: "Invalid password" });
+      return res.status(400).json({ err: "Invalid password" });
     }
     const { password, ...userInfo } = user._doc;
 

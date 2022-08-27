@@ -1,10 +1,18 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import { Button, TextField, Box, LinearProgress } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Box,
+  LinearProgress,
+  Stack,
+  Alert,
+} from "@mui/material";
 import axios from "axios";
 import joi from "joi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -28,11 +36,19 @@ const register = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const [isError, setIsError] = useState(false);
 
   const navigate = useNavigate();
-  const onSubmitHandler = (e) => {
-    setIsLoading(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    token && navigate("/home");
+  }, []);
+
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
+
     const isValidUser = schema.validate({
       email,
       username,
@@ -49,11 +65,21 @@ const register = () => {
     };
 
     try {
-      const res = axios.post("http://localhost:5001/api/user/register", user);
+      setIsLoading(true);
+      const res = await axios.post(
+        "http://localhost:5001/api/user/register",
+        user
+      );
       console.log(res);
+      setIsLoading(false);
       navigate("/login");
     } catch (err) {
+      setIsLoading(false);
+      setIsError(true);
       console.log(err);
+      err.response.data.err
+        ? setError(err.response.data.err)
+        : setError("Something went wrong");
     }
   };
 
@@ -76,7 +102,10 @@ const register = () => {
           fullWidth
           color="primary"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setIsError(false);
+            setEmail(e.target.value);
+          }}
           id="outlined-basic"
           label="Email"
           variant="outlined"
@@ -87,7 +116,10 @@ const register = () => {
           fullWidth
           color="primary"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setIsError(false);
+            setUsername(e.target.value);
+          }}
           id="outlined-basic"
           label="Username"
           variant="outlined"
@@ -101,6 +133,7 @@ const register = () => {
           type="password"
           value={password}
           onChange={(e) => {
+            setIsError(false);
             setPassword(e.target.value);
           }}
           variant="outlined"
@@ -114,6 +147,7 @@ const register = () => {
           type="password"
           value={confirmPassword}
           onChange={(e) => {
+            setIsError(false);
             setConfirmPassword(e.target.value);
           }}
           variant="outlined"
@@ -124,11 +158,27 @@ const register = () => {
           Register
         </Button>
       </Grid>
-      {isLoading && (
-        <Box sx={{ width: "100%" }}>
-          <LinearProgress />
-        </Box>
-      )}
+      <Grid item xs={12}>
+        {isLoading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        {isError && (
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            <Alert
+              sx={{ textAlign: "center" }}
+              icon={false}
+              variant="filled"
+              severity="error"
+            >
+              {error}
+            </Alert>
+          </Stack>
+        )}
+      </Grid>
     </Grid>
   );
 };

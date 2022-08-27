@@ -5,9 +5,11 @@ import {
   Button,
   Box,
   LinearProgress,
+  Stack,
+  Alert,
 } from "@mui/material";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import joi from "joi";
@@ -24,7 +26,14 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    token && navigate("/home");
+  }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -46,12 +55,12 @@ const Login = () => {
       }
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
+      setIsError(true);
+      setError(err.response.data.err);
     }
   };
 
   if (localStorage.getItem("token")) {
-    console.log(localStorage.getItem("token"));
     return <Navigate replace to="/home" />;
   }
 
@@ -74,7 +83,10 @@ const Login = () => {
           fullWidth
           color="primary"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setIsError(false);
+            setEmail(e.target.value);
+          }}
           id="outlined-basic"
           label="Email"
           variant="outlined"
@@ -86,7 +98,10 @@ const Login = () => {
           color="primary"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setIsError(false);
+            setPassword(e.target.value);
+          }}
           id="outlined-basic"
           label="Password"
           variant="outlined"
@@ -97,11 +112,23 @@ const Login = () => {
           Login
         </Button>
       </Grid>
-      {isLoading && (
-        <Box sx={{ width: "100%" }}>
-          <LinearProgress />
-        </Box>
-      )}
+
+      <Grid item xs={12}>
+        {isLoading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        {isError && (
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            <Alert icon={false} variant="filled" severity="error">
+              {error}
+            </Alert>
+          </Stack>
+        )}
+      </Grid>
     </Grid>
   );
 };
