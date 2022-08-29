@@ -5,9 +5,9 @@ const pwdRegex =
 
 const schema = joi.object({
   email: joi.string().min(3).required().email(),
-  username: joi.string().min(3),
-  password: joi.string().regex(pwdRegex),
-  confirmPassword: joi.string().regex(pwdRegex),
+  username: joi.string().min(3).required(),
+  password: joi.string().regex(pwdRegex).required(),
+  confirmPassword: joi.string().regex(pwdRegex).required(),
 });
 
 module.exports = schema;

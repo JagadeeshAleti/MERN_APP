@@ -38,13 +38,15 @@ const register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isError, setIsError] = useState(false);
+  const [disableButton, setDisableButton] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    email && username && password && confirmPassword && setDisableButton(false);
     const token = localStorage.getItem("token");
     token && navigate("/home");
-  }, []);
+  }, [email, username, password, confirmPassword]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -91,7 +93,7 @@ const register = () => {
             color: "blue",
             textAlign: "center",
             fontWeight: "bold",
-            fontSize: 24,
+            fontSize: 32,
           }}
         >
           Register
@@ -155,7 +157,12 @@ const register = () => {
         ></TextField>
       </Grid>
       <Grid item xs={12}>
-        <Button fullWidth onClick={onSubmitHandler} variant="contained">
+        <Button
+          fullWidth
+          // disabled={disableButton}
+          onClick={onSubmitHandler}
+          variant="contained"
+        >
           Register
         </Button>
       </Grid>
@@ -173,13 +180,8 @@ const register = () => {
       </Grid>
       <Grid item xs={12}>
         {isError && (
-          <Stack sx={{ width: "100%" }} spacing={2}>
-            <Alert
-              sx={{ textAlign: "center" }}
-              icon={false}
-              variant="filled"
-              severity="error"
-            >
+          <Stack sx={{ width: "100%" }}>
+            <Alert icon={false} variant="filled" severity="error">
               {error}
             </Alert>
           </Stack>

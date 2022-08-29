@@ -29,12 +29,14 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState();
+  const [disableButton, setDisableButton] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    email && password && setDisableButton(false);
     const token = localStorage.getItem("token");
     token && navigate("/home");
-  }, []);
+  }, [email, password]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -73,7 +75,7 @@ const Login = () => {
             color: "blue",
             textAlign: "center",
             fontWeight: "bold",
-            fontSize: 24,
+            fontSize: 32,
           }}
         >
           Login
@@ -109,7 +111,12 @@ const Login = () => {
         />
       </Grid>
       <Grid item xs="12">
-        <Button fullWidth variant="contained" onClick={onSubmitHandler}>
+        <Button
+          fullWidth
+          disabled={disableButton}
+          variant="contained"
+          onClick={onSubmitHandler}
+        >
           Login
         </Button>
       </Grid>

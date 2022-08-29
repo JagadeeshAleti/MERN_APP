@@ -11,11 +11,12 @@ module.exports.registerValidations = async (req, res, next) => {
     password,
     confirmPassword,
   });
-  console.log(isValidSchema);
+
   if (isValidSchema.error) {
-    logger.error(isValidSchema.error);
+    const err = isValidSchema.error.details?.map((d) => d.message).join(",");
+    logger.error(err);
     return res.status(401).send({
-      err: "Invalid email or username or password",
+      err: err,
     });
   }
 
