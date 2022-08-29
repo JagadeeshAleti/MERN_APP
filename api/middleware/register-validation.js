@@ -3,7 +3,7 @@ const logger = require("../utils/logger");
 const registerSchema = require("../validation-schema/register-validation-schema");
 
 module.exports.registerValidations = async (req, res, next) => {
-  const { email, username, password, confirmPassword } = req.body;
+  const { email, username, password, confirmPassword, usertype } = req.body;
 
   const isValidSchema = registerSchema.validate({
     email,

@@ -1,5 +1,10 @@
 const router = require("express").Router();
 const User = require("../models/User");
+
+const Vendor = require("../models/Vendor");
+const Admin = require("../models/Admin");
+const Customer = require("../models/Customer");
+
 const logger = require("../utils/logger");
 
 const bcrypt = require("bcrypt");
@@ -8,27 +13,61 @@ const jwt = require("jsonwebtoken");
 const { registerValidations } = require("../middleware/register-validation");
 const { loginValidations } = require("../middleware/login-validation");
 
+const UserType = {
+  VENDOR: "VENDOR",
+  ADMIN: "ADMIN",
+  CUSTOMER: "CUSTOMER",
+};
+
 //REGISTER
 router.post("/register", [registerValidations], async (req, res) => {
   try {
-    const { email, username } = req.body;
+    const { email, username, password, usertype } = req.body;
     logger.info(`registering a new user: ${email}`);
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPwd = await bcrypt.hash(req.body.password, salt);
+    const hashedPwd = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       email,
       username,
       password: hashedPwd,
+      usertype,
     });
 
     const user = await newUser.save();
-    const { password, ...userInfo } = user._doc;
+    const { password: userPassword, ...userInfo } = user._doc;
 
+    if (usertype === UserType.VENDOR) {
+      const vendorUser = new Vendor({
+        userID: userInfo._id,
+      });
+
+      await vendorUser.save();
+      logger.info("New vendor registered successfully!!!");
+    }
+
+    if (usertype === UserType.ADMIN) {
+      const adminUser = new Admin({
+        userID: userInfo._id,
+      });
+
+      await adminUser.save();
+      logger.info("New admin registered successfully!!!");
+    }
+
+    if (usertype === UserType.CUSTOMER) {
+      const customerUser = new Customer({
+        userID: userInfo._id,
+      });
+
+      await customerUser.save();
+      logger.info("New customer registered successfully!!!");
+    }
     logger.info(`succecfully registered a new user: ${email}`);
-    res.status(200).json(userInfo);
+    res.status(200).json({ userInfo });
   } catch (err) {
+    console.log(err);
     logger.error(err);
     res.status(500).json(err);
   }
