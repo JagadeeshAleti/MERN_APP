@@ -1,12 +1,7 @@
-const User = require("../models/User");
-const joi = require("joi");
-
-const schema = joi.object({
-  email: joi.string().min(3).required().email(),
-});
+const loginSchema = require("../validation-schema/login-validation-schema");
 
 module.exports.loginValidations = async (req, res, next) => {
-  const isValidSchema = schema.validate({
+  const isValidSchema = loginSchema.validate({
     email: req.body.email,
   });
 

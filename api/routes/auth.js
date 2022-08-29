@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
+const logger = require("../utils/logger");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -11,7 +12,7 @@ const { loginValidations } = require("../middleware/login-validation");
 router.post("/register", [registerValidations], async (req, res) => {
   try {
     const { email, username } = req.body;
-    console.log("registering a new user: ", email);
+    logger.info(`registering a new user: ${email}`);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPwd = await bcrypt.hash(req.body.password, salt);
@@ -25,9 +26,10 @@ router.post("/register", [registerValidations], async (req, res) => {
     const user = await newUser.save();
     const { password, ...userInfo } = user._doc;
 
-    console.log("succecfully registered a new user: ", email);
+    logger.info(`succecfully registered a new user: ${email}`);
     res.status(200).json(userInfo);
   } catch (err) {
+    logger.error(err);
     res.status(500).json(err);
   }
 });
@@ -35,7 +37,7 @@ router.post("/register", [registerValidations], async (req, res) => {
 //LOGIN
 router.post("/login", [loginValidations], async (req, res) => {
   try {
-    console.log("User logging in.....");
+    logger.info("User logging in.....");
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -55,9 +57,10 @@ router.post("/login", [loginValidations], async (req, res) => {
         expiresIn: "1800s",
       }
     );
-    console.log("User logged sucessfully!!!");
+    logger.info("User logged sucessfully!!!");
     res.status(200).json({ token });
   } catch (err) {
+    logger.error(err);
     res.status(500).json(err);
   }
 });

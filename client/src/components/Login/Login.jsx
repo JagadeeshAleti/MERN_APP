@@ -7,6 +7,7 @@ import {
   LinearProgress,
   Stack,
   Alert,
+  Link,
 } from "@mui/material";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -113,6 +114,11 @@ const Login = () => {
         </Button>
       </Grid>
 
+      <Grid item xs={12}>
+        <Typography align="center">
+          Don't have an account? <Link href="/register">register here</Link>
+        </Typography>
+      </Grid>
       <Grid item xs={12}>
         {isLoading && (
           <Box sx={{ width: "100%" }}>

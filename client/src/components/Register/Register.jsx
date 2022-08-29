@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Link, Typography } from "@mui/material";
 import {
   Button,
   TextField,
@@ -97,6 +97,7 @@ const register = () => {
           Register
         </Typography>
       </Grid>
+
       <Grid item xs={12}>
         <TextField
           fullWidth
@@ -157,6 +158,11 @@ const register = () => {
         <Button fullWidth onClick={onSubmitHandler} variant="contained">
           Register
         </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography align="center">
+          Already have an account <Link href="/login">login here</Link>
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         {isLoading && (

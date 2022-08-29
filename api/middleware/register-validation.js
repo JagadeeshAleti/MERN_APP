@@ -1,28 +1,21 @@
 const User = require("../models/User");
-const joi = require("joi");
-const pwdRegex =
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-
-const schema = joi.object({
-  email: joi.string().min(3).required().email(),
-  username: joi.string().min(3).alphanum(),
-  password: joi.string().regex(pwdRegex),
-  confirmPassword: joi.string().regex(pwdRegex),
-});
+const logger = require("../utils/logger");
+const registerSchema = require("../validation-schema/register-validation-schema");
 
 module.exports.registerValidations = async (req, res, next) => {
   const { email, username, password, confirmPassword } = req.body;
 
-  const isValidUser = schema.validate({
+  const isValidSchema = registerSchema.validate({
     email,
     username,
     password,
     confirmPassword,
   });
-
-  if (isValidUser.error) {
+  console.log(isValidSchema);
+  if (isValidSchema.error) {
+    logger.error(isValidSchema.error);
     return res.status(401).send({
-      err: "Invalid email or password",
+      err: "Invalid email or username or password",
     });
   }
 
