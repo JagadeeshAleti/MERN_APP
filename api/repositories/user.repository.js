@@ -1,5 +1,4 @@
 const User = require("../models/User");
-
 const logger = require("../utils/logger");
 
 module.exports.UserRepository = {
@@ -10,5 +9,17 @@ module.exports.UserRepository = {
       throw new Error("more than one record asssoiciated with the given email");
     }
     return users[0];
+  },
+
+  saveUser: async ({ email, username, hashedPwd, usertype }) => {
+    const newUser = new User({
+      email,
+      username,
+      password: hashedPwd,
+      usertype,
+    });
+
+    await newUser.save();
+    return newUser;
   },
 };

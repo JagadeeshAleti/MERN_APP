@@ -1,4 +1,5 @@
 const Vendor = require("../models/Vendor");
+const logger = require("../utils/logger");
 
 module.exports.VendorRepository = {
   findUserByVendor: async (user) => {
@@ -8,5 +9,14 @@ module.exports.VendorRepository = {
       throw new Error("more than one record asssoiciated with the given email");
     }
     return vendorUsers[0];
+  },
+
+  saveVendorUser: async ({ userInfo, email }) => {
+    const vendorUser = new Vendor({
+      userID: userInfo._id,
+      email,
+    });
+    await vendorUser.save();
+    logger.info("New vendor registered successfully!!!");
   },
 };

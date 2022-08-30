@@ -25,53 +25,16 @@ router.post("/register", [registerValidations], async (req, res) => {
   try {
     const { email, username, password, usertype } = req.body;
     logger.info(`registering a new user: ${email}`);
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPwd = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
+    const userInfo = await AuthController.register({
       email,
       username,
-      password: hashedPwd,
+      password,
       usertype,
     });
-
-    const user = await newUser.save();
-    const { password: userPassword, ...userInfo } = user._doc;
-
-    if (usertype === UserType.VENDOR) {
-      const vendorUser = new Vendor({
-        userID: userInfo._id,
-        email,
-      });
-
-      await vendorUser.save();
-      logger.info("New vendor registered successfully!!!");
-    }
-
-    if (usertype === UserType.ADMIN) {
-      const adminUser = new Admin({
-        userID: userInfo._id,
-        email,
-      });
-
-      await adminUser.save();
-      logger.info("New admin registered successfully!!!");
-    }
-
-    if (usertype === UserType.CUSTOMER) {
-      const customerUser = new Customer({
-        userID: userInfo._id,
-        email,
-      });
-
-      await customerUser.save();
-      logger.info("New registered successfully!!!");
-    }
     logger.info(`succecfully registered a new user: ${email}`);
     res.status(200).json({ userInfo });
   } catch (err) {
-    logger.error(err);
+    logger.error(err.message);
     res.status(500).json(err);
   }
 });

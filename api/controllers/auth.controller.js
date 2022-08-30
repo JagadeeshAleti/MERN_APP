@@ -60,4 +60,32 @@ module.exports.AuthController = {
 
     return token;
   },
+
+  register: async ({ email, username, password, usertype }) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPwd = await bcrypt.hash(password, salt);
+
+    const user = await UserRepository.saveUser({
+      email,
+      username,
+      hashedPwd,
+      usertype,
+    });
+
+    const { password: userPassword, ...userInfo } = user._doc;
+
+    if (usertype === UserType.VENDOR) {
+      await VendorRepository.saveVendorUser({ userInfo, email });
+    }
+
+    if (usertype === UserType.ADMIN) {
+      AdminRepository.saveAdminUser({ userInfo, email });
+    }
+
+    if (usertype === UserType.CUSTOMER) {
+      CustomerRepository.saveCustomerUser({ userInfo, email });
+    }
+
+    return userInfo;
+  },
 };
