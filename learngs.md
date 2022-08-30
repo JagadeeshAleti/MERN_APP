@@ -10,6 +10,8 @@
 - Validations using JOI
 - Status Code
 - Logging
+- Code refactoring
+- Error Handling
 
 # Frontend
 

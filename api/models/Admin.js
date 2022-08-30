@@ -5,6 +5,7 @@ const adminSchema = mongoose.Schema(
     userID: {
       type: mongoose.Schema.Types.ObjectId,
     },
+    email: { type: String, required: true },
   },
   { timestamps: true }
 );
