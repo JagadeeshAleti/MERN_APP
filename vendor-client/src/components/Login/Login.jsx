@@ -49,6 +49,7 @@ const Login = () => {
       const res = await axios.post("http://localhost:5001/api/user/login", {
         email,
         password,
+        userType: "VENDOR",
       });
 
       setIsLoading(false);

@@ -2,8 +2,8 @@ const Customer = require("../models/Customer");
 const logger = require("../utils/logger");
 
 module.exports.CustomerRepository = {
-  findUserByCustomer: async (user) => {
-    const customerUsers = await Customer.find({ userID: user._id });
+  findUserByCustomer: async (userID) => {
+    const customerUsers = await Customer.find({ userID });
     if (customerUsers.length > 1) {
       logger.error("more than one record associated with the given email");
       throw new Error("more than one record asssoiciated with the given email");

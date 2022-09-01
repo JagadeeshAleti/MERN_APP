@@ -2,8 +2,8 @@ const Vendor = require("../models/Vendor");
 const logger = require("../utils/logger");
 
 module.exports.VendorRepository = {
-  findUserByVendor: async (user) => {
-    const vendorUsers = await Vendor.find({ userID: user._id });
+  findUserByVendor: async (userID) => {
+    const vendorUsers = await Vendor.find({ userID });
     if (vendorUsers.length > 1) {
       logger.error("more than one record associated with the given email");
       throw new Error("more than one record asssoiciated with the given email");
@@ -18,5 +18,16 @@ module.exports.VendorRepository = {
     });
     await vendorUser.save();
     logger.info("New vendor registered successfully!!!");
+  },
+
+  updateVendorUser: async ({ email, name, phoneNo, userID }) => {
+    const updatedVendor = {
+      email,
+      name,
+      phoneNo,
+    };
+    await Vendor.findOneAndUpdate({ userID }, updatedVendor);
+    logger.info("Vendor updated successfullly!!!");
+    return await Vendor.find({ userID });
   },
 };

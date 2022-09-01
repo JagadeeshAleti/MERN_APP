@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const authRoute = require("./routes/auth");
+const vendorRoute = require("./routes/vendor");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use("/api/user", authRoute);
+app.use("/api/vendor", vendorRoute);
 
 app.listen("5001", () => {
   console.log("Backend is running.");

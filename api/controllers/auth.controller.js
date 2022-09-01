@@ -7,7 +7,6 @@ const { AdminRepository } = require("../repositories/admin.repository");
 const { CustomerRepository } = require("../repositories/customer.repository");
 
 const { Errors } = require("../constants/error");
-const Vendor = require("../models/Vendor");
 
 const UserType = {
   VENDOR: "VENDOR",
@@ -25,14 +24,14 @@ module.exports.AuthController = {
 
     let mainUser;
     if (userType === UserType.VENDOR) {
-      mainUser = await VendorRepository.findUserByVendor(user);
+      mainUser = await VendorRepository.findUserByVendor(user._id);
     }
     if (userType === UserType.ADMIN) {
-      mainUser = await AdminRepository.findUserByAdmin(user);
+      mainUser = await AdminRepository.findUserByAdmin(user._id);
     }
 
     if (userType === UserType.CUSTOMER) {
-      mainUser = await CustomerRepository.findUserByCustomer(user);
+      mainUser = await CustomerRepository.findUserByCustomer(user._id);
     }
 
     if (user && !mainUser) {

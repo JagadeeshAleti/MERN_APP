@@ -2,8 +2,8 @@ const Admin = require("../models/Admin");
 const logger = require("../utils/logger");
 
 module.exports.AdminRepository = {
-  findUserByAdmin: async (user) => {
-    const adminUsers = await Admin.find({ userID: user._id });
+  findUserByAdmin: async (userID) => {
+    const adminUsers = await Admin.find({ userID });
     if (adminUsers.length > 1) {
       logger.error("more than one record associated with the given email");
       throw new Error("more than one record asssoiciated with the given email");
