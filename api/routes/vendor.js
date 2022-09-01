@@ -1,17 +1,16 @@
 const router = require("express").Router();
-const { VendorController } = require("../controllers/vendorController");
 const logger = require("../utils/logger");
+const { VendorController } = require("../controllers/vendorController");
+const { vendorValidations } = require("../middleware/vendor-validations");
 
-router.put("/update-vendor/:id", async (req, res) => {
-  const { email, name, phoneNo } = req.body;
-  const userID = req.params.id;
+router.put("/:id", vendorValidations, async (req, res) => {
+  const { name, phoneNo } = req.body;
+  const vendorID = req.params.id;
   try {
     logger.info("Updating vendor.....");
-    const updatedVendor = await VendorController.updateVendor({
-      email,
+    const updatedVendor = await VendorController.updateVendor(vendorID, {
       name,
       phoneNo,
-      userID,
     });
     logger.info(`Updates vendor is : ${updatedVendor}`);
     res.status(200).json(updatedVendor);

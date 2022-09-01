@@ -1,12 +1,10 @@
 const { VendorRepository } = require("../repositories/vendor.repository");
 
 module.exports.VendorController = {
-  updateVendor: async ({ email, name, phoneNo, userID }) => {
-    const updatedVendor = await VendorRepository.updateVendorUser({
-      email,
+  updateVendor: async (vendorID, { name, phoneNo }) => {
+    const updatedVendor = await VendorRepository.updateVendorUser(vendorID, {
       name,
       phoneNo,
-      userID,
     });
     return updatedVendor;
   },

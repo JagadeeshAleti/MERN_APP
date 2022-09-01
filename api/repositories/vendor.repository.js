@@ -20,14 +20,14 @@ module.exports.VendorRepository = {
     logger.info("New vendor registered successfully!!!");
   },
 
-  updateVendorUser: async ({ email, name, phoneNo, userID }) => {
-    const updatedVendor = {
+  updateVendorUser: async (id, { email, name, phoneNo }) => {
+    const vendor = {
       email,
       name,
       phoneNo,
     };
-    await Vendor.findOneAndUpdate({ userID }, updatedVendor);
+    await Vendor.findByIdAndUpdate(id, vendor);
     logger.info("Vendor updated successfullly!!!");
-    return await Vendor.find({ userID });
+    return await Vendor.findById(id);
   },
 };
