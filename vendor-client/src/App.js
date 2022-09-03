@@ -13,8 +13,8 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<Home />} />
-            <Route path="/vendor-form" element={<VendorForm />} />
           </Route>
+          <Route path="/vendor-form" element={<VendorForm />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>

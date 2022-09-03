@@ -1,25 +1,11 @@
 const router = require("express").Router();
-const User = require("../models/User");
-
-const Vendor = require("../models/Vendor");
-const Admin = require("../models/Admin");
-const Customer = require("../models/Customer");
-
 const logger = require("../utils/logger");
-
-const bcrypt = require("bcrypt");
 
 const { registerValidations } = require("../middleware/register-validation");
 const { loginValidations } = require("../middleware/login-validation");
 const { AuthController } = require("../controllers/auth.controller");
-const { Errors } = require("../constants/error");
 const { ErrorHandler } = require("../utils/error");
 
-const UserType = {
-  VENDOR: "VENDOR",
-  ADMIN: "ADMIN",
-  CUSTOMER: "CUSTOMER",
-};
 //REGISTER
 router.post("/register", [registerValidations], async (req, res) => {
   try {

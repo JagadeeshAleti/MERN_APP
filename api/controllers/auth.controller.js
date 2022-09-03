@@ -24,7 +24,7 @@ module.exports.AuthController = {
 
     let mainUser;
     if (userType === UserType.VENDOR) {
-      mainUser = await VendorRepository.findUserByVendor(user._id);
+      mainUser = await VendorRepository.findVendorByUserID(user._id);
     }
     if (userType === UserType.ADMIN) {
       mainUser = await AdminRepository.findUserByAdmin(user._id);

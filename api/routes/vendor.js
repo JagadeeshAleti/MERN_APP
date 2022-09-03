@@ -21,4 +21,13 @@ router.put("/:id", vendorValidations, async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    logger.info("Fetching vendor details....");
+    const vendorInfo = await VendorController.getVednorDetails(id);
+    logger.info("Vendor details fetched sucessfully.....");
+    res.status(201).json(vendorInfo);
+  } catch (err) {}
+});
 module.exports = router;
