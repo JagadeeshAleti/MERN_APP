@@ -64,6 +64,7 @@ const register = () => {
       email,
       password,
       confirmPassword,
+      usertype: "VENDOR",
     };
 
     try {
@@ -86,7 +87,7 @@ const register = () => {
   };
 
   return (
-    <Grid container item xs={12} sm={4} m={"auto"} rowGap={2} mt={"10%"}>
+    <Grid container item xs={12} sm={6} m={"auto"} rowGap={2} mt={"10%"}>
       <Grid item xs={12}>
         <Typography
           sx={{
@@ -102,6 +103,7 @@ const register = () => {
 
       <Grid item xs={12}>
         <TextField
+          required
           fullWidth
           color="primary"
           value={email}
@@ -159,7 +161,7 @@ const register = () => {
       <Grid item xs={12}>
         <Button
           fullWidth
-          // disabled={disableButton}
+          disabled={disableButton}
           onClick={onSubmitHandler}
           variant="contained"
         >

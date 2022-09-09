@@ -23,6 +23,7 @@ const schema = joi.object({
     .required()
     .email({ tlds: false }),
 });
+
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -69,7 +70,7 @@ const Login = () => {
   }
 
   return (
-    <Grid container item xs={12} sm={4} m="auto" rowGap={2} mt={"10%"}>
+    <Grid container item xs={12} sm={6} m="auto" rowGap={2} mt={"10%"}>
       <Grid item xs={12}>
         <Typography
           sx={{
@@ -114,7 +115,7 @@ const Login = () => {
       <Grid item xs="12">
         <Button
           fullWidth
-          // disabled={disableButton}
+          disabled={disableButton}
           variant="contained"
           onClick={onSubmitHandler}
         >

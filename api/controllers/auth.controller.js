@@ -48,8 +48,8 @@ module.exports.AuthController = {
       {
         email: userInfo.email,
         type: userType,
-        userID: JSON.stringify(user._id),
-        refUserID: JSON.stringify(mainUser._id),
+        userID: user._id,
+        refUserID: mainUser._id,
       },
       process.env.TOKEN_SECRET,
       {

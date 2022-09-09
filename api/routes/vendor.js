@@ -3,6 +3,7 @@ const logger = require("../utils/logger");
 const { VendorController } = require("../controllers/vendorController");
 const { vendorValidations } = require("../middleware/vendor-validations");
 
+// Authorization
 router.put("/:id", vendorValidations, async (req, res) => {
   const { name, phoneNo } = req.body;
   const vendorID = req.params.id;
