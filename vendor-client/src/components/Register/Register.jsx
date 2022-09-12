@@ -13,6 +13,7 @@ import joi from "joi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { getConfig } from "../../config";
 
 const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -69,10 +70,7 @@ const register = () => {
 
     try {
       setIsLoading(true);
-      const res = await axios.post(
-        "http://localhost:5001/api/user/register",
-        user
-      );
+      const res = await axios.post(`${getConfig}/user/register`, user);
       console.log(res);
       setIsLoading(false);
       navigate("/login");

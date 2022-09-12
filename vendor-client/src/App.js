@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import First from "./components/First/First";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -13,9 +14,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<ProtectedRoute />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/vendor/vendor-form" element={<VendorForm />} />
-            <Route path="/vendor/vendor-view" element={<VendorView />} />
+            <Route path="/" element={<Home />}>
+              <Route path="/home" element={<First />} />
+              <Route path="/vendor/view" element={<VendorView />} />
+              <Route path="/vendor/update" element={<VendorForm />} />
+            </Route>
           </Route>
 
           <Route path="/register" element={<Register />} />

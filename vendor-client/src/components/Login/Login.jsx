@@ -15,6 +15,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 import joi from "joi";
 import axios from "axios";
+import { getConfig } from "../../config";
 
 const schema = joi.object({
   email: joi
@@ -25,8 +26,8 @@ const schema = joi.object({
 });
 
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState();
@@ -47,7 +48,7 @@ const Login = () => {
     console.log(isValidUser);
     try {
       setIsLoading(true);
-      const res = await axios.post("http://localhost:5001/api/user/login", {
+      const res = await axios.post(`${getConfig().backend}/user/login`, {
         email,
         password,
         userType: "VENDOR",
@@ -66,7 +67,7 @@ const Login = () => {
   };
 
   if (localStorage.getItem("token")) {
-    return <Navigate replace to="/home" />;
+    return <Navigate replace to="/" />;
   }
 
   return (
@@ -83,7 +84,7 @@ const Login = () => {
           Login
         </Typography>
       </Grid>
-      <Grid item xs="12">
+      <Grid item xs={12}>
         <TextField
           fullWidth
           color="primary"
@@ -92,12 +93,11 @@ const Login = () => {
             setIsError(false);
             setEmail(e.target.value);
           }}
-          id="outlined-basic"
           label="Email"
           variant="outlined"
         />
       </Grid>
-      <Grid item xs="12">
+      <Grid item xs={12}>
         <TextField
           fullWidth
           color="primary"
@@ -107,12 +107,11 @@ const Login = () => {
             setIsError(false);
             setPassword(e.target.value);
           }}
-          id="outlined-basic"
           label="Password"
           variant="outlined"
         />
       </Grid>
-      <Grid item xs="12">
+      <Grid item xs={12}>
         <Button
           fullWidth
           disabled={disableButton}

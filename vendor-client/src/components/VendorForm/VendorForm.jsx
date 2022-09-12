@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getConfig } from "../../config";
 
 const VendorForm = () => {
   const [name, setName] = useState("");
@@ -33,10 +34,7 @@ const VendorForm = () => {
   const submitHandler = async () => {
     const body = { name, phoneNo };
     try {
-      const res = await axios.put(
-        `http://localhost:5001/api/vendor/${vendorId}`,
-        body
-      );
+      const res = await axios.put(`${getConfig}/vendor/${vendorId}`, body);
 
       res && navigate("/vendor/vendor-view");
     } catch (err) {

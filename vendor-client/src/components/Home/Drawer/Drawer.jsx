@@ -1,8 +1,7 @@
 import React from "react";
-import { styled, Typography } from "@mui/material";
+import { Button, styled, Typography } from "@mui/material";
 
 import {
-  Link,
   Drawer,
   List,
   ListItem,
@@ -16,7 +15,7 @@ import {
   Visibility as VisibilityIcon,
   Update as UpdateIcon,
 } from "@mui/icons-material";
-import { Box, flexbox } from "@mui/system";
+import { Box } from "@mui/system";
 
 const drawerWidth = 240;
 
@@ -29,7 +28,11 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export const CustomDrawer = ({ open, onDrawerClose }) => {
+export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
+  const handleClick = () => {
+    onDrawerClose();
+    onClick();
+  };
   return (
     <Drawer
       ModalProps={{
@@ -76,9 +79,9 @@ export const CustomDrawer = ({ open, onDrawerClose }) => {
               <ListItemIcon>
                 {index % 2 === 0 ? <VisibilityIcon /> : <UpdateIcon />}
               </ListItemIcon>
-              <Link href="/vendor-view" underline="none">
+              <Button onClick={handleClick}>
                 <ListItemText primary={text} />
-              </Link>
+              </Button>
             </ListItemButton>
           </ListItem>
         ))}
