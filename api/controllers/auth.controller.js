@@ -7,12 +7,7 @@ const { AdminRepository } = require("../repositories/admin.repository");
 const { CustomerRepository } = require("../repositories/customer.repository");
 
 const { Errors } = require("../constants/error");
-
-const UserType = {
-  VENDOR: "VENDOR",
-  ADMIN: "ADMIN",
-  CUSTOMER: "CUSTOMER",
-};
+const { UserType } = require("../constants/user-types");
 
 module.exports.AuthController = {
   login: async ({ email, userType, password }) => {
@@ -53,7 +48,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "1800s",
+        expiresIn: "180000s",
       }
     );
 

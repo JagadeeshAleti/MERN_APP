@@ -18,9 +18,12 @@ const VendorView = () => {
     const vendorInfo = { ...jwt.decode(token) };
     const { userID, ...others } = vendorInfo;
 
-    const userInfo = await axios.get(`${getConfig().backend}/vendor`, {
-      headers: { Authorization: token },
-    });
+    const userInfo = await axios.get(
+      `${getConfig().backend}/vendor/${userID}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
     setUser(userInfo.data);
   };
 

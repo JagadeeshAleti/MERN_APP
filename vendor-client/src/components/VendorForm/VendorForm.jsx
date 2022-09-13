@@ -14,9 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { getConfig } from "../../config";
 
 const VendorForm = () => {
-  const [name, setName] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
+  const [vendor, setVendor] = useState({ name: "", phoneNo: "" });
   const [vendorId, setVendorId] = useState();
+  const [token, setToken] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
@@ -26,17 +26,31 @@ const VendorForm = () => {
 
   const init = async () => {
     const token = localStorage.getItem("token");
-    const vendorInfo = { ...jwt.decode(token) };
-    const { refUserID: vendorId, ...others } = vendorInfo;
+    setToken(token);
+    const tokenInfo = { ...jwt.decode(token) };
+    const { userID, refUserID: vendorId, ...others } = tokenInfo;
     setVendorId(vendorId);
+
+    const userInfo = await axios.get(
+      `${getConfig().backend}/vendor/${userID}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    setVendor(userInfo.data.vendor);
   };
 
   const submitHandler = async () => {
-    const body = { name, phoneNo };
+    const body = { name: vendor.name, phoneNo: vendor.phoneNo };
     try {
-      const res = await axios.put(`${getConfig}/vendor/${vendorId}`, body);
-
-      res && navigate("/vendor/vendor-view");
+      const res = await axios.put(
+        `${getConfig().backend}/vendor/${vendorId}`,
+        body,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      res && navigate("/vendor/view");
     } catch (err) {
       setError(err.response.data.err);
     }
@@ -61,11 +75,9 @@ const VendorForm = () => {
           color="primary"
           onChange={(e) => {
             setError();
-            setName(e.target.value);
+            setVendor({ name: e.target.value, phoneNo: vendor.phoneNo });
           }}
-          value={name}
-          id="outlined-basic"
-          label="Name"
+          value={vendor.name}
           variant="outlined"
         />
       </Grid>
@@ -75,12 +87,10 @@ const VendorForm = () => {
           color="primary"
           onChange={(e) => {
             setError();
-            setPhoneNo(e.target.value);
+            setVendor({ name: vendor.name, phoneNo: e.target.value });
           }}
-          value={phoneNo}
+          value={vendor.phoneNo}
           type="number"
-          id="outlined-basic"
-          label="Phone"
           variant="outlined"
         />
       </Grid>
