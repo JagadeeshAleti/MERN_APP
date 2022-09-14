@@ -59,7 +59,6 @@ const register = () => {
       confirmPassword,
     });
 
-    console.log(isValidUser);
     const user = {
       username,
       email,
@@ -70,7 +69,10 @@ const register = () => {
 
     try {
       setIsLoading(true);
-      const res = await axios.post(`${getConfig}/user/register`, user);
+      const res = await axios.post(
+        `${getConfig().backend}/user/register`,
+        user
+      );
       console.log(res);
       setIsLoading(false);
       navigate("/login");

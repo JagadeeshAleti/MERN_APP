@@ -3,8 +3,9 @@ const logger = require("../utils/logger");
 const registerSchema = require("../validation-schema/register-validation-schema");
 
 module.exports.registerValidations = async (req, res, next) => {
-  const { email, username, password, confirmPassword, usertype } = req.body;
+  logger.info("validating register details!");
 
+  const { email, username, password, confirmPassword } = req.body;
   const isValidSchema = registerSchema.validate({
     email,
     username,
@@ -40,6 +41,6 @@ module.exports.registerValidations = async (req, res, next) => {
   if (existedUser.length >= 1) {
     return res.status(409).json({ err: "User alreay existed" });
   }
-
+  logger.info("register details are verified successfully.");
   next();
 };

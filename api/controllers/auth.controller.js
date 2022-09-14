@@ -8,9 +8,12 @@ const { CustomerRepository } = require("../repositories/customer.repository");
 
 const { Errors } = require("../constants/error");
 const { UserType } = require("../constants/user-types");
+const logger = require("../utils/logger");
 
 module.exports.AuthController = {
-  login: async ({ email, userType, password }) => {
+  login: async ({ email, password }) => {
+    logger.info("Inside login controller.");
+
     const user = await UserRepository.findByEmail(email);
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
@@ -18,15 +21,15 @@ module.exports.AuthController = {
     }
 
     let mainUser;
-    if (userType === UserType.VENDOR) {
+    if (user.usertype === UserType.VENDOR) {
       mainUser = await VendorRepository.findVendorByUserID(user._id);
     }
-    if (userType === UserType.ADMIN) {
-      mainUser = await AdminRepository.findUserByAdmin(user._id);
+    if (user.usertype === UserType.ADMIN) {
+      mainUser = await AdminRepository.findAdminByUserID(user._id);
     }
 
-    if (userType === UserType.CUSTOMER) {
-      mainUser = await CustomerRepository.findUserByCustomer(user._id);
+    if (user.usertype === UserType.CUSTOMER) {
+      mainUser = await CustomerRepository.findCustomerByUserID(user._id);
     }
 
     if (user && !mainUser) {
@@ -42,20 +45,32 @@ module.exports.AuthController = {
     const token = jwt.sign(
       {
         email: userInfo.email,
-        type: userType,
         userID: user._id,
         refUserID: mainUser._id,
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "120s",
+        expiresIn: "12000s",
       }
     );
 
-    return token;
+    const refreshToken = jwt.sign(
+      {
+        email: userInfo.email,
+        userID: user._id,
+        refUserID: mainUser._id,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: "3600s",
+      }
+    );
+    logger.info("login controller executed successfully!");
+    return { token, refreshToken };
   },
 
   register: async ({ email, username, password, usertype }) => {
+    logger.info("Inside register controller");
     const salt = await bcrypt.genSalt(10);
     const hashedPwd = await bcrypt.hash(password, salt);
 
@@ -79,7 +94,7 @@ module.exports.AuthController = {
     if (usertype === UserType.CUSTOMER) {
       CustomerRepository.saveCustomerUser({ userInfo, email });
     }
-
+    logger.info("register controller executed successfully");
     return userInfo;
   },
 };

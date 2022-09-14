@@ -53,7 +53,7 @@ const Login = () => {
         password,
         userType: "VENDOR",
       });
-
+      console.log(res);
       setIsLoading(false);
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);

@@ -1,5 +1,6 @@
 const { UserRepository } = require("../repositories/user.repository");
 const { VendorRepository } = require("../repositories/vendor.repository");
+const logger = require("../utils/logger");
 
 module.exports.VendorController = {
   getVednorDetails: async (userID) => {
@@ -7,10 +8,9 @@ module.exports.VendorController = {
   },
 
   updateVendor: async (vendorID, { name, phoneNo }) => {
-    const updatedVendor = await VendorRepository.updateVendorUser(vendorID, {
+    return await VendorRepository.updateVendorUser(vendorID, {
       name,
       phoneNo,
     });
-    return updatedVendor;
   },
 };

@@ -17,10 +17,10 @@ const VendorView = () => {
   const init = async () => {
     const token = localStorage.getItem("token");
     const vendorInfo = { ...jwt.decode(token) };
-    const { userID, ...others } = vendorInfo;
+    const { refUserID, ...others } = vendorInfo;
 
     const userInfo = await axios.get(
-      `${getConfig().backend}/vendor/${userID}`,
+      `${getConfig().backend}/vendor/${refUserID}`,
       {
         headers: { Authorization: token },
       }
