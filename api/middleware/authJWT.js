@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const jwt = require("jsonwebtoken");
 const { UserRepository } = require("../repositories/user.repository");
 const { ErrorHandler } = require("../utils/error");
@@ -5,7 +6,7 @@ const { ErrorHandler } = require("../utils/error");
 const verifyToken = (type) => {
   return async (req, res, next) => {
     try {
-      const header = req.headers && req.headers.authorization;
+      const header = _.get(req, "headers.authorization");
 
       if (header) {
         const decode = await jwt.verify(header, process.env.TOKEN_SECRET);

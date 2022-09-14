@@ -1,6 +1,7 @@
 import React from "react";
 import jwt from "jsonwebtoken";
 import axios from "axios";
+import _ from "lodash";
 
 import { useEffect, useState } from "react";
 import { Grid, Typography, Link, Avatar, Divider } from "@mui/material";
@@ -26,8 +27,6 @@ const VendorView = () => {
     );
     setUser(userInfo.data);
   };
-
-  const { vendor = {} } = user || {};
 
   return (
     <Grid container item xs={12} mt={5}>
@@ -56,7 +55,7 @@ const VendorView = () => {
             color={"#0047AB"}
             sx={{ textDecoration: "underline" }}
           >
-            {vendor.name}
+            {_.get(user, "vendor.name")}
           </Typography>
         </Grid>
         <Grid container rowGap={2} item width={200} m="auto">
@@ -74,9 +73,7 @@ const VendorView = () => {
               <Box width={75}>
                 <Typography color={"#0047AB"}>Phone</Typography>
               </Box>
-              <Typography>
-                {user && user.vendor && user.vendor.phoneNo}
-              </Typography>
+              <Typography>{_.get(user, "vendor.phoneNo")}</Typography>
             </Box>
           </Grid>
         </Grid>
