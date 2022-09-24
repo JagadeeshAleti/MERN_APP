@@ -11,10 +11,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getConfig } from "../../config";
+import { getConfig } from "../config";
+import { HttpClient } from "../http/http";
+import _ from "lodash";
 
-const VendorForm = () => {
-  const [vendor, setVendor] = useState({ name: "", phoneNo: "" });
+const VendorUpdate = () => {
+  const [vendor, setVendor] = useState();
   const [vendorId, setVendorId] = useState();
   const [token, setToken] = useState();
   const [error, setError] = useState();
@@ -31,25 +33,14 @@ const VendorForm = () => {
     const { userID, refUserID: vendorId, ...others } = tokenInfo;
     setVendorId(vendorId);
 
-    const userInfo = await axios.get(
-      `${getConfig().backend}/vendor/${userID}`,
-      {
-        headers: { Authorization: token },
-      }
-    );
-    setVendor(userInfo.data.vendor);
+    const vendorInfo = await HttpClient.get(`vendor/${userID}`);
+    setVendor(_.get(vendorInfo, "vendor"));
   };
 
   const submitHandler = async () => {
     const body = { name: vendor.name, phoneNo: vendor.phoneNo };
     try {
-      const res = await axios.put(
-        `${getConfig().backend}/vendor/${vendorId}`,
-        body,
-        {
-          headers: { Authorization: token },
-        }
-      );
+      const res = await HttpClient.put(`vendor/${vendorId}`, body);
       res && navigate("/vendor/view");
     } catch (err) {
       setError(err.response.data.err);
@@ -77,7 +68,7 @@ const VendorForm = () => {
             setError();
             setVendor({ name: e.target.value, phoneNo: vendor.phoneNo });
           }}
-          value={vendor.name}
+          value={_.get(vendor, "name")}
           variant="outlined"
         />
       </Grid>
@@ -89,7 +80,7 @@ const VendorForm = () => {
             setError();
             setVendor({ name: vendor.name, phoneNo: e.target.value });
           }}
-          value={vendor.phoneNo}
+          value={_.get(vendor, "phoneNo")}
           type="number"
           variant="outlined"
         />
@@ -112,4 +103,4 @@ const VendorForm = () => {
   );
 };
 
-export default VendorForm;
+export default VendorUpdate;

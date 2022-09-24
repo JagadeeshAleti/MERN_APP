@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import First from "./components/First/First";
-import Home from "./components/Home/Home";
-import Login from "./components/Login/Login";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Register from "./components/Register/Register";
-import VendorForm from "./components/VendorForm/VendorForm";
-import VendorView from "./components/VendorView/VendorView";
+import ProtectedRoute from "./components/ProtectedRoute";
+import VendorUpdate from "./pages/VendorUpdate";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import VendorView from "./pages/VendorView";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
             <Route path="/" element={<Home />}>
               <Route path="/home" element={<First />} />
               <Route path="/vendor/view" element={<VendorView />} />
-              <Route path="/vendor/update" element={<VendorForm />} />
+              <Route path="/vendor/update" element={<VendorUpdate />} />
             </Route>
           </Route>
 

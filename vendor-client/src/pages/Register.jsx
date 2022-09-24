@@ -8,12 +8,12 @@ import {
   Stack,
   Alert,
 } from "@mui/material";
-import axios from "axios";
+import _ from "lodash";
 import joi from "joi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { getConfig } from "../../config";
+import { HttpClient } from "../http/http";
 
 const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -69,10 +69,7 @@ const register = () => {
 
     try {
       setIsLoading(true);
-      const res = await axios.post(
-        `${getConfig().backend}/user/register`,
-        user
-      );
+      const res = HttpClient.post("user/register", user);
       console.log(res);
       setIsLoading(false);
       navigate("/login");
@@ -80,7 +77,7 @@ const register = () => {
       setIsLoading(false);
       setIsError(true);
       console.log(err);
-      err.response.data.err
+      _.get(err, "response.data.err")
         ? setError(err.response.data.err)
         : setError("Something went wrong");
     }

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Grid,
   TextField,
@@ -9,13 +10,12 @@ import {
   Alert,
   Link,
 } from "@mui/material";
-import React from "react";
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
+import _ from "lodash";
 import joi from "joi";
-import axios from "axios";
-import { getConfig } from "../../config";
+import { HttpClient } from "../http/http";
 
 const schema = joi.object({
   email: joi
@@ -48,21 +48,21 @@ const Login = () => {
     console.log(isValidUser);
     try {
       setIsLoading(true);
-      const res = await axios.post(`${getConfig().backend}/user/login`, {
+      const res = await HttpClient.post("user/login", {
         email,
         password,
         userType: "VENDOR",
       });
-      console.log(res);
       setIsLoading(false);
-      if (res.data.token) {
+      if (_.get(res, "data.token")) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         navigate("/home");
       }
     } catch (err) {
       setIsLoading(false);
       setIsError(true);
-      setError(err.response.data.err);
+      setError(_.get(err, "response.data.err"));
     }
   };
 

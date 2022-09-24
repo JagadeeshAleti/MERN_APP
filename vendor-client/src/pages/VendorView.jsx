@@ -1,15 +1,14 @@
 import React from "react";
 import jwt from "jsonwebtoken";
-import axios from "axios";
 import _ from "lodash";
 
 import { useEffect, useState } from "react";
 import { Grid, Typography, Link, Avatar, Divider } from "@mui/material";
 import { Box } from "@mui/system";
-import { getConfig } from "../../config";
+import { HttpClient } from "../http/http";
 
 const VendorView = () => {
-  const [user, setUser] = useState({ email: "", name: "", phoneNo: "" });
+  const [user, setUser] = useState();
   useEffect(() => {
     init();
   }, []);
@@ -19,13 +18,8 @@ const VendorView = () => {
     const vendorInfo = { ...jwt.decode(token) };
     const { refUserID, ...others } = vendorInfo;
 
-    const userInfo = await axios.get(
-      `${getConfig().backend}/vendor/${refUserID}`,
-      {
-        headers: { Authorization: token },
-      }
-    );
-    setUser(userInfo.data);
+    const user = await HttpClient.get(`vendor/${refUserID}`);
+    setUser(user);
   };
 
   return (
@@ -64,7 +58,7 @@ const VendorView = () => {
               <Box width={75}>
                 <Typography color={"#0047AB"}>Email</Typography>
               </Box>
-              <Typography>{user.email}</Typography>
+              <Typography>{_.get(user, "email")}</Typography>
             </Box>
           </Grid>
 

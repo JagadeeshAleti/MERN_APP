@@ -40,8 +40,7 @@ module.exports.AuthController = {
       throw new Error(Errors.NOT_AUTHORISED);
     }
 
-    const { userPassword, ...userInfo } = user._doc;
-
+    const { password: userPassword, ...userInfo } = user._doc;
     const token = jwt.sign(
       {
         email: userInfo.email,
@@ -50,7 +49,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "12000s",
+        expiresIn: "600s",
       }
     );
 
@@ -96,5 +95,37 @@ module.exports.AuthController = {
     }
     logger.info("register controller executed successfully");
     return userInfo;
+  },
+
+  refreshToken: async (refreshToken) => {
+    if (refreshToken) {
+      logger.info("decoding refresh token.......");
+      let userInfo;
+      try {
+        userInfo = await jwt.verify(
+          refreshToken,
+          process.env.REFRESH_TOKEN_SECRET
+        );
+        logger.info("refresh token decoded successfully!");
+        const newToken = jwt.sign(
+          {
+            email: userInfo.email,
+            userID: userInfo.userID,
+            refUserID: userInfo.refUserID,
+          },
+          process.env.TOKEN_SECRET,
+          {
+            expiresIn: "60s",
+          }
+        );
+
+        return newToken;
+      } catch (e) {
+        logger.error(e.message);
+      }
+      if (!userInfo) {
+        throw new Error("NOT_AUTHORISED");
+      }
+    }
   },
 };

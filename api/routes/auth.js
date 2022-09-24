@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const logger = require("../utils/logger");
+const jwt = require("jsonwebtoken");
+const _ = require("lodash");
 
 const { registerValidations } = require("../middleware/register-validation");
 const { loginValidations } = require("../middleware/login-validation");
@@ -36,15 +38,8 @@ router.post("/login", [loginValidations], async (req, res) => {
       password,
     });
 
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
     logger.info("User logged in sucessfully!!!");
-    res.status(200).json({ token });
+    res.status(200).json({ token, refreshToken });
   } catch (err) {
     logger.error(err.message);
     const [code, message] = ErrorHandler.handle(err);
@@ -52,4 +47,14 @@ router.post("/login", [loginValidations], async (req, res) => {
   }
 });
 
+router.post("/refreshToken", async (req, res) => {
+  try {
+    const refreshToken = _.get(req, "headers.authorization");
+    const newToken = await AuthController.refreshToken(refreshToken);
+    res.status(200).json({ newToken });
+  } catch (err) {
+    const [code, message] = ErrorHandler.handle(err);
+    res.status(code).json({ message });
+  }
+});
 module.exports = router;

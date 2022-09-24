@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const logger = require("../utils/logger");
+const _ = require("lodash");
 const registerSchema = require("../validation-schema/register-validation-schema");
 
 module.exports.registerValidations = async (req, res, next) => {
@@ -14,7 +15,9 @@ module.exports.registerValidations = async (req, res, next) => {
   });
 
   if (isValidSchema.error) {
-    const err = isValidSchema.error.details?.map((d) => d.message).join(",");
+    const err = _.get(isValidSchema, "error.details")
+      .map((d) => d.message)
+      .join(",");
     logger.error(err);
     return res.status(401).send({
       err: err,

@@ -1,10 +1,10 @@
 import * as React from "react";
 
 import { Box, CssBaseline } from "@mui/material";
-import { Main } from "./Main/Main";
-import { DrawerHeader } from "./Drawer/Drawer";
-import { CustomAppBar } from "./AppBar/AppBar";
-import { CustomDrawer } from "./Drawer/Drawer";
+import { Main } from "../components/Home/Main/Main";
+import { DrawerHeader } from "../components/Home/Drawer/Drawer";
+import { CustomAppBar } from "../components/Home/AppBar/AppBar";
+import { CustomDrawer } from "../components/Home/Drawer/Drawer";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
