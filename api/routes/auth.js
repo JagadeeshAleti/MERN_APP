@@ -49,9 +49,12 @@ router.post("/login", [loginValidations], async (req, res) => {
 
 router.post("/refreshToken", async (req, res) => {
   try {
+    logger.info("generating new token using refresh token....");
     const refreshToken = _.get(req, "headers.authorization");
-    const newToken = await AuthController.refreshToken(refreshToken);
-    res.status(200).json({ newToken });
+    const { newToken, newRefreshToken } = await AuthController.refreshToken(
+      refreshToken
+    );
+    res.status(200).json({ newToken, newRefreshToken });
   } catch (err) {
     const [code, message] = ErrorHandler.handle(err);
     res.status(code).json({ message });

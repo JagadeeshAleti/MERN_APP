@@ -16,6 +16,9 @@ const verifyToken = (type) => {
           decode = await jwt.verify(header, process.env.TOKEN_SECRET);
           logger.info("token decoded successfully!");
         } catch (e) {
+          if (e instanceof jwt.TokenExpiredError) {
+            throw new Error("TOKEN_EXPIRED");
+          }
           logger.error(e.message);
         }
 
@@ -33,8 +36,8 @@ const verifyToken = (type) => {
         throw new Error("NOT_AUTHORISED");
       }
     } catch (err) {
-      const [code, message] = ErrorHandler.handle(err);
-      res.status(code).json({ message });
+      const r = ErrorHandler.handle(err);
+      res.status(r.status).json(r);
     }
   };
 };

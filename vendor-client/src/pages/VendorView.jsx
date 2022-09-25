@@ -8,6 +8,7 @@ import { Box } from "@mui/system";
 import { HttpClient } from "../http/http";
 
 const VendorView = () => {
+  //TODO:
   const [user, setUser] = useState();
   useEffect(() => {
     init();
@@ -16,8 +17,7 @@ const VendorView = () => {
   const init = async () => {
     const token = localStorage.getItem("token");
     const vendorInfo = { ...jwt.decode(token) };
-    const { refUserID, ...others } = vendorInfo;
-
+    const { refUserID } = vendorInfo;
     const user = await HttpClient.get(`vendor/${refUserID}`);
     setUser(user);
   };

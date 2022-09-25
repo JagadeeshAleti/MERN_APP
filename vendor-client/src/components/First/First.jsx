@@ -14,7 +14,12 @@ const First = () => {
         justifyContent: "center",
       }}
     >
-      <Typography variant="h3" color="#00008B" fontWeight={"bold"}>
+      <Typography
+        variant="h3"
+        color="#00008B"
+        fontWeight={"bold"}
+        textAlign={"center"}
+      >
         Welcome to the dashboard
       </Typography>
 

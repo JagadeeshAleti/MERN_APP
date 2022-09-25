@@ -49,7 +49,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "600s",
+        expiresIn: "120s",
       }
     );
 
@@ -115,11 +115,22 @@ module.exports.AuthController = {
           },
           process.env.TOKEN_SECRET,
           {
-            expiresIn: "60s",
+            expiresIn: "120s",
           }
         );
 
-        return newToken;
+        const newRefreshToken = jwt.sign(
+          {
+            email: userInfo.email,
+            userID: userInfo.userID,
+            refUserID: userInfo.refUserID,
+          },
+          process.env.REFRESH_TOKEN_SECRET,
+          {
+            expiresIn: "3600s",
+          }
+        );
+        return { newToken, newRefreshToken };
       } catch (e) {
         logger.error(e.message);
       }

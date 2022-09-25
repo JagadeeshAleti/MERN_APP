@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getConfig } from "../config";
 import _ from "lodash";
+import { getConfig } from "../config";
 
 const url = getConfig().backend;
 
@@ -13,6 +13,7 @@ export const HttpClient = {
       console.log("error", e);
     }
   },
+
   getAll: () => {},
 
   get: async (subUrl) => {
@@ -23,7 +24,21 @@ export const HttpClient = {
       });
       return result.data;
     } catch (e) {
-      console.log("error", e);
+      if (_.get(e, "response.data.code") === "TOKEN_EXPIRED") {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const res = await axios.post(
+          `${url}/user/refreshToken`,
+          {},
+          {
+            headers: { Authorization: refreshToken },
+          }
+        );
+        localStorage.setItem("token", _.get(res, "data.newToken"));
+        localStorage.setItem(
+          "refreshToken",
+          _.get(res, "data.newRefreshToken")
+        );
+      }
     }
   },
 

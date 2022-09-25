@@ -9,16 +9,13 @@ import {
   Stack,
   Alert,
 } from "@mui/material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getConfig } from "../config";
 import { HttpClient } from "../http/http";
 import _ from "lodash";
 
 const VendorUpdate = () => {
   const [vendor, setVendor] = useState();
   const [vendorId, setVendorId] = useState();
-  const [token, setToken] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
@@ -28,7 +25,6 @@ const VendorUpdate = () => {
 
   const init = async () => {
     const token = localStorage.getItem("token");
-    setToken(token);
     const tokenInfo = { ...jwt.decode(token) };
     const { userID, refUserID: vendorId, ...others } = tokenInfo;
     setVendorId(vendorId);

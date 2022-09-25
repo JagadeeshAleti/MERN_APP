@@ -26,8 +26,8 @@ router.put(
       res.status(200).json(updatedVendor);
     } catch (err) {
       logger.error(err.message);
-      const [code, message] = ErrorHandler.handle(err);
-      res.status(code).json({ message });
+      const r = ErrorHandler.handle(err);
+      res.status(r.status).json(r);
     }
   }
 );
@@ -42,8 +42,8 @@ router.get("/:id", verifyToken(UserType.VENDOR), async (req, res) => {
     res.status(201).json(vendorInfo);
   } catch (err) {
     logger.error("Error is :", err.message);
-    const [code, message] = ErrorHandler.handle(err);
-    res.status(code).json({ message });
+    const r = ErrorHandler.handle(err);
+    res.status(r.status).json(r);
   }
 });
 module.exports = router;
