@@ -1,7 +1,10 @@
+const { info } = require("winston");
 const { Errors } = require("../constants/error");
+const logger = require("./logger");
 
 module.exports.ErrorHandler = {
   handle(err) {
+    logger.info("error handeling", err);
     if (err.message == Errors.NOT_AUTHORISED) {
       return {
         status: 401,

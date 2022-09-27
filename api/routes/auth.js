@@ -12,52 +12,56 @@ const { ErrorHandler } = require("../utils/error");
 router.post("/register", registerValidations, async (req, res) => {
   try {
     const { email, username, password, usertype } = req.body;
-    logger.info(`registering a new user: ${email}`);
+    logger.info(`/register : registering a new user: ${email}`);
     const userInfo = await AuthController.register({
       email,
       username,
       password,
       usertype,
     });
-    logger.info(`User registered successfully with email: ${email}`);
+    logger.info(
+      `/register : User registered successfully with email: ${email}`
+    );
     res.status(200).json({ userInfo });
   } catch (err) {
-    logger.error(err.message);
-    res.status(500).json(err);
+    logger.error(`/register: error ${err.message}`);
+    const resp = ErrorHandler.handle(err);
+    res.status(resp.status).json(resp);
   }
 });
 
 //LOGIN
-router.post("/login", [loginValidations], async (req, res) => {
+router.post("/login", loginValidations, async (req, res) => {
   try {
     const { email, password } = req.body;
-    logger.info(`User logging in with email : ${email}`);
+    logger.info(`/login: User logging in with email : ${email}`);
 
     const { token, refreshToken } = await AuthController.login({
       email,
       password,
     });
 
-    logger.info("User logged in sucessfully!!!");
+    logger.info("/login: User logged in sucessfully!!!");
     res.status(200).json({ token, refreshToken });
   } catch (err) {
-    logger.error(err.message);
-    const [code, message] = ErrorHandler.handle(err);
-    res.status(code).json({ message });
+    logger.error(`/login: error ${err.message}`);
+    const resp = ErrorHandler.handle(err);
+    res.status(resp.status).json(resp);
   }
 });
 
 router.post("/refreshToken", async (req, res) => {
   try {
-    logger.info("generating new token using refresh token....");
+    logger.info("/refreshTokne:  generating new token using refresh token....");
     const refreshToken = _.get(req, "headers.authorization");
     const { newToken, newRefreshToken } = await AuthController.refreshToken(
       refreshToken
     );
     res.status(200).json({ newToken, newRefreshToken });
   } catch (err) {
-    const [code, message] = ErrorHandler.handle(err);
-    res.status(code).json({ message });
+    logger.error(`/login: error ${err.message}`);
+    const resp = ErrorHandler.handle(err);
+    res.status(resp.status).json(resp);
   }
 });
 module.exports = router;

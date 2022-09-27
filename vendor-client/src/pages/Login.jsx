@@ -29,7 +29,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [error, setError] = useState();
   const [disableButton, setDisableButton] = useState(true);
   const navigate = useNavigate();
@@ -45,7 +44,6 @@ const Login = () => {
     const isValidUser = schema.validate({
       email,
     });
-    console.log(isValidUser);
     try {
       setIsLoading(true);
       const res = await HttpClient.post("user/login", {
@@ -53,6 +51,7 @@ const Login = () => {
         password,
         userType: "VENDOR",
       });
+      console.log("res: ", res);
       setIsLoading(false);
       if (_.get(res, "data.token")) {
         localStorage.setItem("token", res.data.token);
@@ -60,9 +59,14 @@ const Login = () => {
         navigate("/home");
       }
     } catch (err) {
+      console.log("err: ", _.get(err, "response.data"));
+      if (_.get(err, "response.data.err")) {
+        setError(_.get(err, "response.data.err"));
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(false);
-      setIsError(true);
-      setError(_.get(err, "response.data.err"));
+      setError(_.get(err, "response.data.message"));
     }
   };
 
@@ -90,7 +94,7 @@ const Login = () => {
           color="primary"
           value={email}
           onChange={(e) => {
-            setIsError(false);
+            setError();
             setEmail(e.target.value);
           }}
           label="Email"
@@ -104,7 +108,7 @@ const Login = () => {
           type="password"
           value={password}
           onChange={(e) => {
-            setIsError(false);
+            setError();
             setPassword(e.target.value);
           }}
           label="Password"
@@ -135,7 +139,7 @@ const Login = () => {
         )}
       </Grid>
       <Grid item xs={12}>
-        {isError && (
+        {error && (
           <Stack sx={{ width: "100%" }} spacing={2}>
             <Alert icon={false} variant="filled" severity="error">
               {error}

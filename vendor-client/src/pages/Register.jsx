@@ -32,13 +32,12 @@ const schema = joi.object({
 });
 
 const register = () => {
-  const [email, setEmail] = useState();
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [isError, setIsError] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
 
   const navigate = useNavigate();
@@ -52,12 +51,19 @@ const register = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const isValidUser = schema.validate({
+    const isValidSchema = schema.validate({
       email,
       username,
       password,
       confirmPassword,
     });
+    if (isValidSchema.error) {
+      const err = _.get(isValidSchema, "error.details")
+        .map((d) => d.message)
+        .join(",");
+
+      setError(err + "from front end");
+    }
 
     const user = {
       username,
@@ -69,17 +75,20 @@ const register = () => {
 
     try {
       setIsLoading(true);
-      const res = HttpClient.post("user/register", user);
-      console.log(res);
+      const res = await HttpClient.post("user/register", user);
+      console.log("res: " + res);
+      setError(_.get(res, "response.data.err"));
       setIsLoading(false);
       navigate("/login");
     } catch (err) {
+      console.log("err: ", _.get(err, "response.data"));
+      if (_.get(err, "response.data.err")) {
+        setError(_.get(err, "response.data.err"));
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(false);
-      setIsError(true);
-      console.log(err);
-      _.get(err, "response.data.err")
-        ? setError(err.response.data.err)
-        : setError("Something went wrong");
+      setError(_.get(err, "response.data.message"));
     }
   };
 
@@ -105,10 +114,9 @@ const register = () => {
           color="primary"
           value={email}
           onChange={(e) => {
-            setIsError(false);
+            setError("");
             setEmail(e.target.value);
           }}
-          id="outlined-basic"
           label="Email"
           variant="outlined"
         />
@@ -119,10 +127,9 @@ const register = () => {
           color="primary"
           value={username}
           onChange={(e) => {
-            setIsError(false);
+            setError("");
             setUsername(e.target.value);
           }}
-          id="outlined-basic"
           label="Username"
           variant="outlined"
         ></TextField>
@@ -130,26 +137,24 @@ const register = () => {
       <Grid item xs={12}>
         <TextField
           fullWidth
-          id="filled-basic"
           label="Password"
           type="password"
           value={password}
           onChange={(e) => {
-            setIsError(false);
+            setError("");
             setPassword(e.target.value);
           }}
           variant="outlined"
         />
       </Grid>
-      <Grid xs={12}>
+      <Grid item xs={12}>
         <TextField
           fullWidth
-          id="filled-basic"
           label="Confirm Password"
           type="password"
           value={confirmPassword}
           onChange={(e) => {
-            setIsError(false);
+            setError("");
             setConfirmPassword(e.target.value);
           }}
           variant="outlined"
@@ -178,7 +183,7 @@ const register = () => {
         )}
       </Grid>
       <Grid item xs={12}>
-        {isError && (
+        {error && (
           <Stack sx={{ width: "100%" }}>
             <Alert icon={false} variant="filled" severity="error">
               {error}

@@ -26,7 +26,7 @@ const VendorUpdate = () => {
   const init = async () => {
     const token = localStorage.getItem("token");
     const tokenInfo = { ...jwt.decode(token) };
-    const { userID, refUserID: vendorId, ...others } = tokenInfo;
+    const { userID, refUserID: vendorId } = tokenInfo;
     setVendorId(vendorId);
 
     const vendorInfo = await HttpClient.get(`vendor/${userID}`);
