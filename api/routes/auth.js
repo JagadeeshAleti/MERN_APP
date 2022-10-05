@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const logger = require("../utils/logger");
-const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 
 const { registerValidations } = require("../middleware/register-validation");
@@ -33,12 +32,13 @@ router.post("/register", registerValidations, async (req, res) => {
 //LOGIN
 router.post("/login", loginValidations, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, userType } = req.body;
     logger.info(`/login: User logging in with email : ${email}`);
 
     const { token, refreshToken } = await AuthController.login({
       email,
       password,
+      userType,
     });
 
     logger.info("/login: User logged in sucessfully!!!");

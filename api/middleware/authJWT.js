@@ -21,12 +21,12 @@ const verifyToken = (type) => {
           }
           logger.error(e.message);
         }
-
+        console.log("Token payload : ", decode);
         if (!decode) {
           throw new Error("NOT_AUTHORISED");
         }
-        console.log(decode);
-        const user = await UserRepository.findUserByID(decode.userID);
+        const user = await UserRepository.findUserByID(decode.userID, type);
+
         if (user.usertype === type) {
           req.user = user;
           return next();

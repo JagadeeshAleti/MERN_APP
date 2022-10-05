@@ -1,21 +1,21 @@
 import React from "react";
+import { Grid, Link, Typography } from "@mui/material";
 import {
-  Grid,
-  TextField,
-  Typography,
   Button,
+  TextField,
   Box,
   LinearProgress,
   Stack,
   Alert,
-  Link,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-
 import _ from "lodash";
 import joi from "joi";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { HttpClient } from "../http/http";
+
+const pwdRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
 const schema = joi.object({
   email: joi
@@ -23,28 +23,40 @@ const schema = joi.object({
     .min(3)
     .required()
     .email({ tlds: false }),
+  username: joi
+    .string()
+    .min(3)
+    .alphanum(),
+  password: joi.string().regex(pwdRegex),
+  confirmPassword: joi.string().regex(pwdRegex),
 });
 
-const Login = () => {
+const register = () => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [disableButton, setDisableButton] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    email && password && setDisableButton(false);
+    email && username && password && confirmPassword && setDisableButton(false);
     const token = localStorage.getItem("token");
     token && navigate("/home");
-  }, [email, password]);
+  }, [email, username, password, confirmPassword]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+
     const isValidSchema = schema.validate({
       email,
+      username,
+      password,
+      confirmPassword,
     });
-
     if (isValidSchema.error) {
       const err = _.get(isValidSchema, "error.details")
         .map((d) => d.message)
@@ -52,20 +64,22 @@ const Login = () => {
 
       setError(err + "from front end");
     }
+
+    const user = {
+      username,
+      email,
+      password,
+      confirmPassword,
+      usertype: "ADMIN",
+    };
+
     try {
       setIsLoading(true);
-      const res = await HttpClient.post("user/login", {
-        email,
-        password,
-        userType: "VENDOR",
-      });
-      console.log("res: ", res);
+      const res = await HttpClient.post("user/register", user);
+      console.log("res: " + res);
+      setError(_.get(res, "response.data.err"));
       setIsLoading(false);
-      if (_.get(res, "data.token")) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        navigate("/home");
-      }
+      navigate("/login");
     } catch (err) {
       console.log("err: ", _.get(err, "response.data"));
       if (_.get(err, "response.data.err")) {
@@ -78,12 +92,8 @@ const Login = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
-    return <Navigate replace to="/" />;
-  }
-
   return (
-    <Grid container item xs={12} sm={6} m="auto" rowGap={2} mt={"10%"}>
+    <Grid container item xs={12} sm={6} m={"auto"} rowGap={2} mt={"10%"}>
       <Grid item xs={12}>
         <Typography
           sx={{
@@ -93,16 +103,18 @@ const Login = () => {
             fontSize: 32,
           }}
         >
-          Login
+          Register
         </Typography>
       </Grid>
+
       <Grid item xs={12}>
         <TextField
+          required
           fullWidth
           color="primary"
           value={email}
           onChange={(e) => {
-            setError();
+            setError("");
             setEmail(e.target.value);
           }}
           label="Email"
@@ -113,30 +125,54 @@ const Login = () => {
         <TextField
           fullWidth
           color="primary"
+          value={username}
+          onChange={(e) => {
+            setError("");
+            setUsername(e.target.value);
+          }}
+          label="Username"
+          variant="outlined"
+        ></TextField>
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="Password"
           type="password"
           value={password}
           onChange={(e) => {
-            setError();
+            setError("");
             setPassword(e.target.value);
           }}
-          label="Password"
           variant="outlined"
         />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => {
+            setError("");
+            setConfirmPassword(e.target.value);
+          }}
+          variant="outlined"
+        ></TextField>
       </Grid>
       <Grid item xs={12}>
         <Button
           fullWidth
           disabled={disableButton}
-          variant="contained"
           onClick={onSubmitHandler}
+          variant="contained"
         >
-          Login
+          Register
         </Button>
       </Grid>
-
       <Grid item xs={12}>
         <Typography align="center">
-          Don't have an account? <Link href="/register">register here</Link>
+          Already have an account <Link href="/login">login here</Link>
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -148,7 +184,7 @@ const Login = () => {
       </Grid>
       <Grid item xs={12}>
         {error && (
-          <Stack sx={{ width: "100%" }} spacing={2}>
+          <Stack sx={{ width: "100%" }}>
             <Alert icon={false} variant="filled" severity="error">
               {error}
             </Alert>
@@ -159,4 +195,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default register;

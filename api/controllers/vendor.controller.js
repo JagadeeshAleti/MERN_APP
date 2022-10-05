@@ -3,8 +3,8 @@ const { VendorRepository } = require("../repositories/vendor.repository");
 const logger = require("../utils/logger");
 
 module.exports.VendorController = {
-  getVednorDetails: async (userID) => {
-    return await UserRepository.findUserByID(userID);
+  getVednorDetails: async (userID, type) => {
+    return await UserRepository.findUserByID(userID, type);
   },
 
   updateVendor: async (vendorID, { name, phoneNo }) => {

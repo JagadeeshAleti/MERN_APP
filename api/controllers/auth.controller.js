@@ -11,9 +11,8 @@ const { UserType } = require("../constants/user-types");
 const logger = require("../utils/logger");
 
 module.exports.AuthController = {
-  login: async ({ email, password }) => {
+  login: async ({ email, password, userType }) => {
     logger.info("Inside login controller.");
-
     const user = await UserRepository.findByEmail(email);
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
@@ -21,22 +20,18 @@ module.exports.AuthController = {
     }
 
     let mainUser;
-    if (user.usertype === UserType.VENDOR) {
+    if (userType === UserType.VENDOR) {
       mainUser = await VendorRepository.findVendorByUserID(user._id);
     }
-    if (user.usertype === UserType.ADMIN) {
+    if (userType === UserType.ADMIN) {
       mainUser = await AdminRepository.findAdminByUserID(user._id);
     }
 
-    if (user.usertype === UserType.CUSTOMER) {
+    if (userType === UserType.CUSTOMER) {
       mainUser = await CustomerRepository.findCustomerByUserID(user._id);
     }
 
     if (user && !mainUser) {
-      throw new Error(Errors.NOT_AUTHORISED);
-    }
-
-    if (!mainUser) {
       throw new Error(Errors.NOT_AUTHORISED);
     }
 
@@ -49,7 +44,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "120s",
+        expiresIn: "24h",
       }
     );
 
@@ -61,7 +56,7 @@ module.exports.AuthController = {
       },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: "3600s",
+        expiresIn: "24h",
       }
     );
     logger.info("login controller executed successfully!");
@@ -115,7 +110,7 @@ module.exports.AuthController = {
           },
           process.env.TOKEN_SECRET,
           {
-            expiresIn: "120s",
+            expiresIn: "24h",
           }
         );
 
@@ -127,7 +122,7 @@ module.exports.AuthController = {
           },
           process.env.REFRESH_TOKEN_SECRET,
           {
-            expiresIn: "3600s",
+            expiresIn: "24h",
           }
         );
         return { newToken, newRefreshToken };

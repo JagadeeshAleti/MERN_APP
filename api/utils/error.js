@@ -4,8 +4,8 @@ const logger = require("./logger");
 
 module.exports.ErrorHandler = {
   handle(err) {
-    logger.info("error handeling", err);
-    if (err.message == Errors.NOT_AUTHORISED) {
+    logger.info("error handeling : ", err);
+    if (err.message === Errors.NOT_AUTHORISED) {
       return {
         status: 401,
         message: "Not authorised",

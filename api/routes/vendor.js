@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const logger = require("../utils/logger");
+const _ = require("lodash");
 
-const { VendorController } = require("../controllers/vendorController");
+const { VendorController } = require("../controllers/vendor.controller");
 const { vendorValidations } = require("../middleware/vendor-validations");
 const { ErrorHandler } = require("../utils/error");
 const { UserType } = require("../constants/user-types");
@@ -13,9 +14,9 @@ router.put(
   "/:id",
   [vendorValidations, verifyToken(UserType.VENDOR)],
   async (req, res) => {
-    const vendorID = req.user.vendor._id;
-
+    const vendorID = _.get(req, "user.vendor[0]._id");
     const { name, phoneNo } = req.body;
+    console.log(vendorID);
     try {
       logger.info("updating vendor details.....");
       const updatedVendor = await VendorController.updateVendor(vendorID, {
@@ -37,7 +38,7 @@ router.get("/:id", verifyToken(UserType.VENDOR), async (req, res) => {
   const id = req.user._id;
   try {
     logger.info("fetching vendor details....");
-    const vendorInfo = await VendorController.getVednorDetails(id);
+    const vendorInfo = await VendorController.getVednorDetails(id, "VENDOR");
     logger.info("Vendor details fetched sucessfully.....");
     res.status(201).json(vendorInfo);
   } catch (err) {

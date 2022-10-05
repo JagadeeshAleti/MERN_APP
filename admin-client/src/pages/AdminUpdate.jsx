@@ -13,9 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
 import _ from "lodash";
 
-const VendorUpdate = () => {
-  const [vendor, setVendor] = useState({ name: "", phoneNo: "" });
-  const [vendorId, setVendorId] = useState();
+const AdminUpdate = () => {
+  const [admin, setAdmin] = useState({ name: "", phoneNo: "" });
+  const [adminID, setadminID] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
@@ -26,18 +26,18 @@ const VendorUpdate = () => {
   const init = async () => {
     const token = localStorage.getItem("token");
     const tokenInfo = { ...jwt.decode(token) };
-    const { userID, refUserID: vendorId } = tokenInfo;
-    setVendorId(vendorId);
-
-    const vendorInfo = await HttpClient.get(`vendor/${userID}`);
-    setVendor(_.get(vendorInfo, "vendor[0]"));
+    const { userID, refUserID: adminID } = tokenInfo;
+    setadminID(adminID);
+    const adminInfo = await HttpClient.get(`admin/${userID}`);
+    console.log(_.get(adminInfo, "admin[0]"));
+    setAdmin(_.get(adminInfo, "admin[0]"));
   };
 
   const submitHandler = async () => {
-    const body = { name: vendor.name, phoneNo: vendor.phoneNo };
+    const body = { name: admin.name, phoneNo: admin.phoneNo };
     try {
-      const res = await HttpClient.put(`vendor/${vendorId}`, body);
-      res && navigate("/vendor/view");
+      const res = await HttpClient.put(`admin/${adminID}`, body);
+      res && navigate("/admin/view");
     } catch (err) {
       setError(err.response.data.err);
     }
@@ -62,9 +62,9 @@ const VendorUpdate = () => {
           color="primary"
           onChange={(e) => {
             setError();
-            setVendor({ name: e.target.value, phoneNo: vendor.phoneNo });
+            setAdmin({ name: e.target.value, phoneNo: admin.phoneNo });
           }}
-          value={_.get(vendor, "name")}
+          value={admin.name}
           variant="outlined"
         />
       </Grid>
@@ -74,9 +74,9 @@ const VendorUpdate = () => {
           color="primary"
           onChange={(e) => {
             setError();
-            setVendor({ name: vendor.name, phoneNo: e.target.value });
+            setAdmin({ name: admin.name, phoneNo: e.target.value });
           }}
-          value={_.get(vendor, "phoneNo")}
+          value={admin.phoneNo}
           type="number"
           variant="outlined"
         />
@@ -99,4 +99,4 @@ const VendorUpdate = () => {
   );
 };
 
-export default VendorUpdate;
+export default AdminUpdate;

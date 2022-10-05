@@ -9,8 +9,12 @@ module.exports.CustomerRepository = {
       logger.error("more than one record associated with the given email");
       throw new Error("more than one record asssoiciated with the given email");
     }
-    logger.info(`customer found with the userid : ${userID}`);
+    if (customerUsers.length === 0) {
+      logger.info(`customer not found with the userid : ${userID}`);
+      return;
+    }
 
+    logger.info(`customer found with the userid : ${userID}`);
     return customerUsers[0];
   },
 

@@ -44,7 +44,6 @@ const Login = () => {
     const isValidSchema = schema.validate({
       email,
     });
-
     if (isValidSchema.error) {
       const err = _.get(isValidSchema, "error.details")
         .map((d) => d.message)
@@ -57,7 +56,7 @@ const Login = () => {
       const res = await HttpClient.post("user/login", {
         email,
         password,
-        userType: "VENDOR",
+        userType: "ADMIN",
       });
       console.log("res: ", res);
       setIsLoading(false);

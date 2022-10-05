@@ -7,8 +7,7 @@ import { Grid, Typography, Link, Avatar, Divider } from "@mui/material";
 import { Box } from "@mui/system";
 import { HttpClient } from "../http/http";
 
-const VendorView = () => {
-  //TODO:
+const AdminView = () => {
   const [user, setUser] = useState();
   useEffect(() => {
     init();
@@ -16,10 +15,9 @@ const VendorView = () => {
 
   const init = async () => {
     const token = localStorage.getItem("token");
-    const vendorInfo = { ...jwt.decode(token) };
-    const { refUserID } = vendorInfo;
-    const user = await HttpClient.get(`vendor/${refUserID}`);
-    console.log("User is : ", user);
+    const adminInfo = { ...jwt.decode(token) };
+    const { refUserID } = adminInfo;
+    const user = await HttpClient.get(`admin/${refUserID}`);
     setUser(user);
   };
 
@@ -50,7 +48,7 @@ const VendorView = () => {
             color={"#0047AB"}
             sx={{ textDecoration: "underline" }}
           >
-            {_.get(user, "vendor[0].name")}
+            {_.get(user, "admin[0].name")}
           </Typography>
         </Grid>
         <Grid container rowGap={2} item width={200} m="auto">
@@ -68,7 +66,7 @@ const VendorView = () => {
               <Box width={75}>
                 <Typography color={"#0047AB"}>Phone</Typography>
               </Box>
-              <Typography>{_.get(user, "vendor[0].phoneNo")}</Typography>
+              <Typography>{_.get(user, "admin[0].phoneNo")}</Typography>
             </Box>
           </Grid>
         </Grid>
@@ -81,7 +79,7 @@ const VendorView = () => {
         <Grid item xs={12}>
           <Box width={200} m="auto">
             <Typography textAlign={"center"}>
-              Edit details? <Link href="/vendor/update">Click here</Link>
+              Edit details? <Link href="/admin/update">Click here</Link>
             </Typography>
           </Box>
         </Grid>
@@ -90,4 +88,4 @@ const VendorView = () => {
   );
 };
 
-export default VendorView;
+export default AdminView;
