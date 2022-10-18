@@ -8,17 +8,6 @@ import { CustomDrawer } from "../components/Home/Drawer/Drawer";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-const routes = [
-  {
-    text: "Profile",
-    route: "/admin/view",
-  },
-  {
-    text: "Services",
-    route: "/admin/services",
-  },
-];
-
 const Home = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -32,10 +21,8 @@ const Home = () => {
     setOpen(!open);
   };
 
-  const onButtonClick = (text) => {
-    routes.map((item) => {
-      return item.text === text && navigate(item.route);
-    });
+  const onButtonClick = (item) => {
+    navigate(item.route);
   };
 
   return (

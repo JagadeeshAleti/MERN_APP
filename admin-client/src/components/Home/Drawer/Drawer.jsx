@@ -26,10 +26,21 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+const routes = [
+  {
+    text: "Profile",
+    route: "/admin/view",
+  },
+  {
+    text: "Services",
+    route: "/admin/services",
+  },
+];
+
 export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
-  const handleClick = (text) => {
+  const handleClick = (route) => {
     onDrawerClose();
-    onClick(text);
+    onClick(route);
   };
 
   return (
@@ -72,8 +83,8 @@ export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
 
       <Divider />
       <List>
-        {["Profile", "Services"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {routes.map((route, index) => (
+          <ListItem key={route.text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? (
@@ -83,8 +94,8 @@ export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
                 )}
               </ListItemIcon>
 
-              <Button onClick={() => handleClick(text)}>
-                <ListItemText primary={text} />
+              <Button onClick={() => handleClick(route)}>
+                <ListItemText primary={route.text} />
               </Button>
             </ListItemButton>
           </ListItem>

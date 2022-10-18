@@ -44,7 +44,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "24h",
+        expiresIn: "360",
       }
     );
 
@@ -56,7 +56,7 @@ module.exports.AuthController = {
       },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: "24h",
+        expiresIn: "72h",
       }
     );
     logger.info("login controller executed successfully!");
@@ -97,10 +97,7 @@ module.exports.AuthController = {
       logger.info("decoding refresh token.......");
       let userInfo;
       try {
-        userInfo = await jwt.verify(
-          refreshToken,
-          process.env.REFRESH_TOKEN_SECRET
-        );
+        userInfo = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         logger.info("refresh token decoded successfully!");
         const newToken = jwt.sign(
           {
@@ -110,7 +107,7 @@ module.exports.AuthController = {
           },
           process.env.TOKEN_SECRET,
           {
-            expiresIn: "24h",
+            expiresIn: "360s",
           }
         );
 
@@ -122,7 +119,7 @@ module.exports.AuthController = {
           },
           process.env.REFRESH_TOKEN_SECRET,
           {
-            expiresIn: "24h",
+            expiresIn: "72h",
           }
         );
         return { newToken, newRefreshToken };

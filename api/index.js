@@ -24,7 +24,7 @@ mongoose
 app.use("/api/user", authRoute);
 app.use("/api/vendor", vendorRoute);
 app.use("/api/admin", adminRoute);
-app.use("/api/service", serviceRoute);
+app.use("/api/services", serviceRoute);
 
 app.listen("5001", () => {
   console.log("Backend is running.");

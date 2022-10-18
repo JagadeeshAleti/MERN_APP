@@ -24,7 +24,10 @@ const First = () => {
       </Typography>
 
       <Typography variant="h6" mt={5} fontWeight={"bold"}>
-        You can view and edit Venor details
+        You can view and edit admin details
+      </Typography>
+      <Typography variant="h6" mt={5} fontWeight={"bold"}>
+        View our service here, :)
       </Typography>
     </Grid>
   );

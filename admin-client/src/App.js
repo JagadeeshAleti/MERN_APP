@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminView from "./pages/AdminView";
 import AdminUpdate from "./pages/AdminUpdate";
+import Services from "./pages/Services";
+import UpdateService from "./pages/UpdateService";
 
 function App() {
   return (
@@ -18,9 +20,17 @@ function App() {
               <Route path="/home" element={<First />} />
               <Route path="/admin/view" element={<AdminView />} />
               <Route path="/admin/update" element={<AdminUpdate />} />
+              <Route path="/admin/services" element={<Services />} />
+              <Route
+                path="/admin/service/update/:id"
+                element={<UpdateService />}
+              />
+              <Route
+                path="/admin/service/new_service"
+                element={<UpdateService />}
+              />
             </Route>
           </Route>
-
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
