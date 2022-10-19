@@ -8,12 +8,12 @@ const verifyToken = (type) => {
   return async (req, res, next) => {
     try {
       const header = _.get(req, "headers.authorization");
-
+      console.log("The header is : ", header);
       if (header) {
         logger.info("decoding token.......");
         let decode;
         try {
-          decode = await jwt.verify(header, process.env.TOKEN_SECRET);
+          decode = jwt.verify(header, process.env.TOKEN_SECRET);
           logger.info("token decoded successfully!");
         } catch (e) {
           if (e instanceof jwt.TokenExpiredError) {
