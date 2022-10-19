@@ -9,6 +9,8 @@ import AdminView from "./pages/AdminView";
 import AdminUpdate from "./pages/AdminUpdate";
 import Services from "./pages/Services";
 import UpdateService from "./pages/UpdateService";
+import CreateService from "./pages/CreateService";
+import { ConfirmDialog } from "./pages/ConfirmDialog";
 
 function App() {
   return (
@@ -27,8 +29,9 @@ function App() {
               />
               <Route
                 path="/admin/service/new_service"
-                element={<UpdateService />}
+                element={<CreateService />}
               />
+              <Route path="/admin/service/delete" element={<ConfirmDialog />} />
             </Route>
           </Route>
           <Route path="/register" element={<Register />} />

@@ -27,7 +27,10 @@ const withRefreshToken = async (fn) => {
 export const HttpClient = {
   post: async (subUrl, body) => {
     return withRefreshToken(async () => {
-      const res = await axios.post(`${url}/${subUrl}`, body);
+      const token = localStorage.getItem("token");
+      const res = await axios.post(`${url}/${subUrl}`, body, {
+        headers: { Authorization: token },
+      });
       return res;
     });
   },
@@ -54,5 +57,13 @@ export const HttpClient = {
     });
   },
 
-  delete: (id) => {},
+  delete: async (subUrl) => {
+    return withRefreshToken(async () => {
+      const token = localStorage.getItem("token");
+      const result = await axios.delete(`${url}/${subUrl}`, {
+        headers: { Authorization: token },
+      });
+      return result;
+    });
+  },
 };

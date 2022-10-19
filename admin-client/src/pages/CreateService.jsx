@@ -1,30 +1,17 @@
-import { Grid, TextField, Button, Typography } from "@mui/material";
 import React from "react";
 import { useState } from "react";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Grid, TextField, Button, Typography } from "@mui/material";
 import { HttpClient } from "../http/http";
+import { useNavigate } from "react-router-dom";
 
-const UpdateService = () => {
+const CreateService = () => {
   const [service, setService] = useState("");
   const navigate = useNavigate();
-  const params = useParams();
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  const init = async () => {
-    const service = await HttpClient.get(`services/${params.id}`);
-    setService(service.service);
-  };
-
   const onSubmitHandler = async () => {
-    const updatedService = await HttpClient.put(`services/${params.id}`, {
-      service,
-    });
-    updatedService && navigate("/admin/services");
+    const res = await HttpClient.post(`services/create`, { service });
+    res && navigate("/admin/services");
   };
+
   return (
     <Grid container item sm={6} m="auto" mt={"10%"} rowGap={2}>
       <Grid item xs={12}>
@@ -36,7 +23,7 @@ const UpdateService = () => {
             fontSize: 32,
           }}
         >
-          Update service
+          New service
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -51,13 +38,19 @@ const UpdateService = () => {
           variant="outlined"
         />
       </Grid>
+
       <Grid item xs={12}>
-        <Button fullWidth variant="contained" onClick={onSubmitHandler}>
-          Update Service
+        <Button
+          disabled={service ? false : true}
+          fullWidth
+          variant="contained"
+          onClick={onSubmitHandler}
+        >
+          Create Service
         </Button>
       </Grid>
     </Grid>
   );
 };
 
-export default UpdateService;
+export default CreateService;
