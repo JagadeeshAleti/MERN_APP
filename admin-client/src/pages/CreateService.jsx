@@ -1,13 +1,24 @@
 import React from "react";
 import { useState } from "react";
-import { Grid, TextField, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  TextField,
+  Button,
+  Typography,
+  LinearProgress,
+} from "@mui/material";
 import { HttpClient } from "../http/http";
 import { useNavigate } from "react-router-dom";
 
 const CreateService = () => {
   const [service, setService] = useState("");
+  const [creatingService, setCreatingService] = useState(false);
+
   const navigate = useNavigate();
+
   const onSubmitHandler = async () => {
+    setCreatingService(true);
     const res = await HttpClient.post(`services/create`, { service });
     res && navigate("/admin/services");
   };
@@ -31,10 +42,9 @@ const CreateService = () => {
           fullWidth
           color="primary"
           type="text"
+          label="service"
           value={service}
-          onChange={(e) => {
-            setService(e.target.value);
-          }}
+          onChange={(e) => setService(e.target.value)}
           variant="outlined"
         />
       </Grid>
@@ -48,6 +58,14 @@ const CreateService = () => {
         >
           Create Service
         </Button>
+      </Grid>
+
+      <Grid item xs={12}>
+        {creatingService && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

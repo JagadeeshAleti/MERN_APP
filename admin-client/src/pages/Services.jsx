@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { HttpClient } from "../http/http";
 
 import {
-  Link,
   Card,
   CardContent,
   Typography,
@@ -16,6 +15,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
+import { Box } from "@mui/system";
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -45,23 +45,33 @@ const Services = () => {
   };
   console.log(services);
 
-  return (
+  return services.length === 0 ? (
+    <Grid>
+      <Typography
+        sx={{
+          fontSize: 32,
+          color: "blue",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textDecoration: "underline",
+        }}
+      >
+        Loading your services.....
+      </Typography>
+    </Grid>
+  ) : (
     <Grid container>
       <ConfirmDialog />
       <Grid item xs={12}>
-        <Link
-          href="service/new_service"
-          sx={{
-            fontSize: 32,
-            color: "blue",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textDecoration: "underline",
-          }}
-        >
-          Create a new service here
-        </Link>
+        <Box sx={{ float: "right" }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/admin/service/new_service")}
+          >
+            Create
+          </Button>
+        </Box>
       </Grid>
 
       <Grid container item xs={12} rowGap={2}>

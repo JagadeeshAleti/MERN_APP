@@ -8,6 +8,8 @@ import {
   Button,
   Stack,
   Alert,
+  Box,
+  LinearProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
@@ -17,6 +19,7 @@ const AdminUpdate = () => {
   const [admin, setAdmin] = useState({ name: "", phoneNo: "" });
   const [adminID, setadminID] = useState();
   const [error, setError] = useState();
+  const [updating, setUpdating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +37,7 @@ const AdminUpdate = () => {
   };
 
   const submitHandler = async () => {
+    setUpdating(true);
     const body = { name: admin.name, phoneNo: admin.phoneNo };
     try {
       const res = await HttpClient.put(`admin/${adminID}`, body);
@@ -60,6 +64,7 @@ const AdminUpdate = () => {
         <TextField
           fullWidth
           color="primary"
+          label="Name"
           onChange={(e) => {
             setError();
             setAdmin({ name: e.target.value, phoneNo: admin.phoneNo });
@@ -72,6 +77,7 @@ const AdminUpdate = () => {
         <TextField
           fullWidth
           color="primary"
+          label="Phone"
           onChange={(e) => {
             setError();
             setAdmin({ name: admin.name, phoneNo: e.target.value });
@@ -93,6 +99,13 @@ const AdminUpdate = () => {
               {error}
             </Alert>
           </Stack>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        {updating && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
         )}
       </Grid>
     </Grid>

@@ -9,6 +9,7 @@ import { HttpClient } from "../http/http";
 
 const AdminView = () => {
   const [user, setUser] = useState();
+
   useEffect(() => {
     init();
   }, []);
@@ -21,7 +22,22 @@ const AdminView = () => {
     setUser(user);
   };
 
-  return (
+  return !user ? (
+    <Grid>
+      <Typography
+        sx={{
+          fontSize: 32,
+          color: "blue",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textDecoration: "underline",
+        }}
+      >
+        Loading admin profile
+      </Typography>
+    </Grid>
+  ) : (
     <Grid container item xs={12} mt={5}>
       <Grid container item xs={12} sm={4} rowGap={2} m="auto">
         <Grid item xs={12}>

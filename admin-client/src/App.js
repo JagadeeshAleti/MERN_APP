@@ -10,7 +10,6 @@ import AdminUpdate from "./pages/AdminUpdate";
 import Services from "./pages/Services";
 import UpdateService from "./pages/UpdateService";
 import CreateService from "./pages/CreateService";
-import { ConfirmDialog } from "./pages/ConfirmDialog";
 
 function App() {
   return (
@@ -31,7 +30,6 @@ function App() {
                 path="/admin/service/new_service"
                 element={<CreateService />}
               />
-              <Route path="/admin/service/delete" element={<ConfirmDialog />} />
             </Route>
           </Route>
           <Route path="/register" element={<Register />} />
