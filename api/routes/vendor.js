@@ -16,7 +16,6 @@ router.put(
   async (req, res) => {
     const vendorID = _.get(req, "user.vendor[0]._id");
     const { name, phoneNo } = req.body;
-    console.log(vendorID);
     try {
       logger.info("updating vendor details.....");
       const updatedVendor = await VendorController.updateVendor(vendorID, {
@@ -38,7 +37,7 @@ router.get("/:id", verifyToken(UserType.VENDOR), async (req, res) => {
   const id = req.user._id;
   try {
     logger.info("fetching vendor details....");
-    const vendorInfo = await VendorController.getVednorDetails(id, "VENDOR");
+    const vendorInfo = await VendorController.getVednorDetails(id);
     logger.info("Vendor details fetched sucessfully.....");
     res.status(201).json(vendorInfo);
   } catch (err) {

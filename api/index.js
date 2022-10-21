@@ -5,9 +5,10 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
 const authRoute = require("./routes/auth");
+const serviceRoute = require("./routes/service");
 const vendorRoute = require("./routes/vendor");
 const adminRoute = require("./routes/admin");
-const serviceRoute = require("./routes/service");
+const customerRoute = require("./routes/customer");
 
 dotenv.config();
 
@@ -22,9 +23,10 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use("/api/user", authRoute);
+app.use("/api/services", serviceRoute);
 app.use("/api/vendor", vendorRoute);
 app.use("/api/admin", adminRoute);
-app.use("/api/services", serviceRoute);
+app.use("/api/customer", customerRoute);
 
 app.listen("5001", () => {
   console.log("Backend is running.");

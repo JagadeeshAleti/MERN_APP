@@ -18,17 +18,21 @@ router.post("/create", verifyToken(UserType.ADMIN), async (req, res) => {
   }
 });
 
-router.get("/", verifyToken(UserType.ADMIN), async (req, res) => {
-  try {
-    logger.info(`/: fetching all services`);
-    const services = await ServiceController.getAllServices();
-    res.status(200).json(services);
-  } catch (err) {
-    logger.error(err.message);
-    const r = ErrorHandler.handle(err);
-    res.status(r.status).json(r);
+router.get(
+  "/",
+  verifyToken(UserType.ADMIN, UserType.CUSTOMER),
+  async (req, res) => {
+    try {
+      logger.info(`/: fetching all services`);
+      const services = await ServiceController.getAllServices();
+      res.status(200).json(services);
+    } catch (err) {
+      logger.error(err.message);
+      const r = ErrorHandler.handle(err);
+      res.status(r.status).json(r);
+    }
   }
-});
+);
 
 router.get(
   "/deletedServices",

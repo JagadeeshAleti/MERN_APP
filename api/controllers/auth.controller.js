@@ -44,7 +44,7 @@ module.exports.AuthController = {
       },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: "360s",
+        expiresIn: "24h",
       }
     );
 
@@ -107,7 +107,7 @@ module.exports.AuthController = {
           },
           process.env.TOKEN_SECRET,
           {
-            expiresIn: "360s",
+            expiresIn: "24h",
           }
         );
 

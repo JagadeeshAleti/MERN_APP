@@ -1,52 +1,30 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, Collection } = require("mongoose");
+const Admin = require("../models/Admin");
+const Customer = require("../models/Customer");
 const User = require("../models/User");
+const Vendor = require("../models/Vendor");
 const logger = require("../utils/logger");
+const _ = require("lodash");
 
 module.exports.UserRepository = {
-  findUserByID: async (id, type) => {
+  findUserByID: async (id) => {
     let collection = {};
+
     logger.info(`finding user with id : ${id}`);
+    const user = await User.findById(id);
 
-    if (type === "VENDOR") {
-      collection = {
-        name: "vendors",
-        as: "vendor",
-      };
-    } else if (type === "ADMIN") {
-      collection = {
-        name: "admins",
-        as: "admin",
-      };
-    } else if (type === CUSTOMER) {
-      collection = {
-        name: "customers",
-        as: "customer",
-      };
+    if (user.usertype === "VENDOR") {
+      collection = { model: Vendor, as: "vendor" };
+    } else if (user.usertype === "ADMIN") {
+      collection = { model: Admin, as: "admin" };
+    } else if (user.usertype === "CUSTOMER") {
+      collection = { model: Customer, as: "customer" };
     }
 
-    const users = await User.aggregate([
-      {
-        $match: { _id: new mongoose.Types.ObjectId(id) },
-      },
-      {
-        $lookup: {
-          from: collection.name,
-          localField: "_id",
-          foreignField: "userID",
-          as: collection.as,
-        },
-      },
-    ]);
+    const { password, ...userDetails } = user._doc;
+    const subTypeDetails = await collection.model.find({ userID: user._id });
 
-    if (users.length > 1) {
-      logger.error("more than one record associated with the given Id");
-      throw new Error("more than one record asssoiciated with the given Id");
-    }
-
-    const { password, ...userInfo } = users[0];
-    return {
-      ...userInfo,
-    };
+    return { ...userDetails, [collection.as]: subTypeDetails };
   },
 
   findByEmail: async (email) => {

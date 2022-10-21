@@ -3,7 +3,7 @@ const { UserRepository } = require("../repositories/user.repository");
 
 module.exports.AdminController = {
   getAdminDetails: async (userID, type) => {
-    return await UserRepository.findUserByID(userID, type);
+    return await UserRepository.findUserByID(userID);
   },
 
   updateAdmin: async (adminID, { name, phoneNo }) => {

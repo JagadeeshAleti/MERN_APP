@@ -4,11 +4,10 @@ const { UserRepository } = require("../repositories/user.repository");
 const { ErrorHandler } = require("../utils/error");
 const logger = require("../utils/logger");
 
-const verifyToken = (type) => {
+const verifyToken = (...types) => {
   return async (req, res, next) => {
     try {
       const header = _.get(req, "headers.authorization");
-      console.log("The header is : ", header);
       if (header) {
         logger.info("decoding token.......");
         let decode;
@@ -25,9 +24,8 @@ const verifyToken = (type) => {
         if (!decode) {
           throw new Error("NOT_AUTHORISED");
         }
-        const user = await UserRepository.findUserByID(decode.userID, type);
-
-        if (user.usertype === type) {
+        const user = await UserRepository.findUserByID(decode.userID);
+        if (types.includes(user.usertype)) {
           req.user = user;
           return next();
         }

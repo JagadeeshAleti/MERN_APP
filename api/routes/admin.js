@@ -38,7 +38,7 @@ router.get("/:id", verifyToken(UserType.ADMIN), async (req, res) => {
   const id = _.get(req, "user._id");
   try {
     logger.info("fetching admin details....");
-    const adminInfo = await AdminController.getAdminDetails(id, "ADMIN");
+    const adminInfo = await AdminController.getAdminDetails(id);
     logger.info("admin details fetched sucessfully.....");
     res.status(201).json(adminInfo);
   } catch (err) {

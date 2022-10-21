@@ -28,4 +28,16 @@ module.exports.CustomerRepository = {
     customerUser.save();
     logger.info("Customer saved in Customer collection successfully");
   },
+
+  updateCustomerUser: async (id, { name, phoneNo }) => {
+    logger.info("Updating customer in customer collection");
+    const customer = {
+      name,
+      phoneNo,
+    };
+    console.log(customer);
+    await Customer.findByIdAndUpdate(id, customer);
+    logger.info("Customer updated in customer collection successfullly");
+    return await Customer.findById(id);
+  },
 };
