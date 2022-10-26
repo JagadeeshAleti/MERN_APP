@@ -6,6 +6,10 @@ const serviceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    photo: {
+      type: String,
+      required: false,
+    },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }

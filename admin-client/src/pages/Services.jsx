@@ -19,6 +19,8 @@ import { Box } from "@mui/system";
 
 const Services = () => {
   const [services, setServices] = useState([]);
+  const PF =
+    "https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/";
 
   const navigate = useNavigate();
 
@@ -31,8 +33,8 @@ const Services = () => {
   };
 
   const fetchServices = async () => {
-    const res = await HttpClient.get(`services`);
-    setServices(res);
+    const services = await HttpClient.get(`services`);
+    setServices(services);
   };
 
   const editService = (_id) => {
@@ -77,17 +79,26 @@ const Services = () => {
       <Grid container item xs={12} rowGap={2}>
         {services.map((service, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card sx={{}}>
+            <Card>
               <CardActionArea>
                 <CardContent>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    fontWeight={"bold"}
-                    textAlign="center"
-                  >
-                    {service.service}
-                  </Typography>
+                  <Grid
+                    component="img"
+                    sx={{
+                      height: 150,
+                      width: 350,
+                      maxHeight: { xs: 150, md: 175 },
+                      maxWidth: { xs: 350, md: 250 },
+                      objectFit: "cover",
+                    }}
+                    alt="The house from the offer."
+                    src={
+                      PF +
+                      service.photo +
+                      "?alt=media&token=c19f2d0a-f254-4391-b589-ef7ee3cad9f5"
+                    }
+                  ></Grid>
+                  <Typography textAlign="center">{service.service}</Typography>
                 </CardContent>
               </CardActionArea>
               <CardActions>

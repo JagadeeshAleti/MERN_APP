@@ -13,22 +13,38 @@ import { useNavigate } from "react-router-dom";
 
 const CreateService = () => {
   const [service, setService] = useState("");
+  const [file, setFile] = useState(null);
   const [creatingService, setCreatingService] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmitHandler = async () => {
     setCreatingService(true);
-    const res = await HttpClient.post(`services/create`, { service });
+    const newService = {
+      service,
+    };
+
+    if (file) {
+      const data = new FormData();
+      const fileName = file.name;
+      data.append("name", fileName);
+      data.append("file", file);
+      newService.photo = fileName;
+      console.log(newService);
+      try {
+        await HttpClient.post("upload", data);
+      } catch (err) {}
+    }
+    const res = await HttpClient.post(`services/create`, newService);
     res && navigate("/admin/services");
   };
 
   return (
-    <Grid container item sm={6} m="auto" mt={"10%"} rowGap={2}>
+    <Grid container item sm={6} m="auto" rowGap={2}>
       <Grid item xs={12}>
         <Typography
           sx={{
-            color: "blue",
+            color: "teal",
             textAlign: "center",
             fontWeight: "bold",
             fontSize: 32,
@@ -48,12 +64,25 @@ const CreateService = () => {
           variant="outlined"
         />
       </Grid>
-
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          color="primary"
+          label="Upload image"
+          onChange={(e) => setFile(e.target.files[0])}
+          variant="outlined"
+          type="file"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </Grid>
       <Grid item xs={12}>
         <Button
           disabled={service ? false : true}
           fullWidth
           variant="contained"
+          type="submit"
           onClick={onSubmitHandler}
         >
           Create Service

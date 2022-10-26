@@ -1,8 +1,8 @@
 const { ServiceRepository } = require("../repositories/service.repository");
 
 module.exports.ServiceController = {
-  createService: async ({ service }) => {
-    return await ServiceRepository.createService({ service });
+  createService: async ({ service, photo }) => {
+    return await ServiceRepository.createService({ service, photo });
   },
 
   getAllServices: async () => {
@@ -17,8 +17,8 @@ module.exports.ServiceController = {
     return await ServiceRepository.getServiceById(id);
   },
 
-  updateServiceById: async (id, { service }) => {
-    return await ServiceRepository.updateServiceById(id, { service });
+  updateServiceById: async (id, { service, photo }) => {
+    return await ServiceRepository.updateServiceById(id, { service, photo });
   },
 
   deleteServiceById: async (id) => {

@@ -8,11 +8,10 @@ const _ = require("lodash");
 
 module.exports.UserRepository = {
   findUserByID: async (id) => {
-    let collection = {};
+    let collection;
 
     logger.info(`finding user with id : ${id}`);
     const user = await User.findById(id);
-
     if (user.usertype === "VENDOR") {
       collection = { model: Vendor, as: "vendor" };
     } else if (user.usertype === "ADMIN") {
@@ -23,7 +22,6 @@ module.exports.UserRepository = {
 
     const { password, ...userDetails } = user._doc;
     const subTypeDetails = await collection.model.find({ userID: user._id });
-
     return { ...userDetails, [collection.as]: subTypeDetails };
   },
 

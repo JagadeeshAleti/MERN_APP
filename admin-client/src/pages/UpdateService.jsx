@@ -13,7 +13,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HttpClient } from "../http/http";
 
 const UpdateService = () => {
-  const [service, setService] = useState([]);
+  const [service, setService] = useState("");
+  const [file, setFile] = useState(null);
   const [updatingService, setIsUpdatingService] = useState(false);
 
   const navigate = useNavigate();
@@ -30,9 +31,27 @@ const UpdateService = () => {
 
   const onSubmitHandler = async () => {
     setIsUpdatingService(true);
-    const updatedService = await HttpClient.put(`services/${params.id}`, {
+
+    const newService = {
       service,
-    });
+    };
+
+    if (file) {
+      const data = new FormData();
+      const fileName = Date.now() + file.name;
+      data.append("name", fileName);
+      data.append("file", file);
+      newService.photo = fileName;
+      console.log(newService);
+      try {
+        await HttpClient.post("upload", data);
+      } catch (err) {}
+    }
+
+    const updatedService = await HttpClient.put(
+      `services/${params.id}`,
+      newService
+    );
     updatedService && navigate("/admin/services");
   };
   return (
@@ -60,6 +79,19 @@ const UpdateService = () => {
             setService(e.target.value);
           }}
           variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          color="primary"
+          label="Upload image"
+          onChange={(e) => setFile(e.target.files[0])}
+          variant="outlined"
+          type="file"
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
       <Grid item xs={12}>

@@ -32,6 +32,18 @@ router.put(
   }
 );
 
+//Get all vendors
+router.get("/", verifyToken(UserType.CUSTOMER), async (req, res) => {
+  try {
+    logger.info("fetching all vendors....");
+    const vendors = await VendorController.getAllVednors();
+    res.status(201).json(vendors);
+  } catch (err) {
+    logger.error("Error is :", err.message);
+    const r = ErrorHandler.handle(err);
+    res.status(r.status).json(r);
+  }
+});
 //Get vendor detaisl
 router.get("/:id", verifyToken(UserType.VENDOR), async (req, res) => {
   const id = req.user._id;

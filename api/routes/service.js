@@ -1,15 +1,18 @@
 const router = require("express").Router();
 const logger = require("../utils/logger");
-const { ServiceController } = require("../controllers/service.controller");
+
 const verifyToken = require("../middleware/authJWT");
+
+const { ServiceController } = require("../controllers/service.controller");
 const { ErrorHandler } = require("../utils/error");
 const { UserType } = require("../constants/user-types");
 
+//create a new service
 router.post("/create", verifyToken(UserType.ADMIN), async (req, res) => {
-  const { service } = req.body;
+  const { service, photo } = req.body;
   try {
     logger.info(`/create: creating service ${service}`);
-    const result = await ServiceController.createService({ service });
+    const result = await ServiceController.createService({ service, photo });
     res.status(201).json(result);
   } catch (err) {
     logger.error(err.message);
@@ -18,6 +21,7 @@ router.post("/create", verifyToken(UserType.ADMIN), async (req, res) => {
   }
 });
 
+//get all services
 router.get(
   "/",
   verifyToken(UserType.ADMIN, UserType.CUSTOMER),
@@ -34,6 +38,7 @@ router.get(
   }
 );
 
+//get deleted services
 router.get(
   "/deletedServices",
   verifyToken(UserType.ADMIN),
@@ -50,6 +55,7 @@ router.get(
   }
 );
 
+//get service by id
 router.get("/:id", verifyToken(UserType.ADMIN), async (req, res) => {
   const id = req.params.id;
   try {
@@ -63,13 +69,15 @@ router.get("/:id", verifyToken(UserType.ADMIN), async (req, res) => {
   }
 });
 
+//update service by id
 router.put("/:id", verifyToken(UserType.ADMIN), async (req, res) => {
   const id = req.params.id;
-  const { service } = req.body;
+  const { service, photo } = req.body;
   try {
     logger.info(`/${id} updating service....`);
     const updatedService = await ServiceController.updateServiceById(id, {
       service,
+      photo,
     });
     res.status(200).json(updatedService);
   } catch (err) {

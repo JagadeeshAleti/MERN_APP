@@ -19,6 +19,11 @@ module.exports.VendorRepository = {
     return vendorUsers[0];
   },
 
+  getAllVednors: async () => {
+    logger.info("Getting vendors info.....");
+    return await Vendor.find();
+  },
+
   saveVendorUser: async ({ userInfo, email }) => {
     logger.info("Saving vendor in the Vendor collection");
     const vendorUser = new Vendor({

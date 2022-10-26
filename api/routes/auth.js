@@ -34,7 +34,6 @@ router.post("/login", loginValidations, async (req, res) => {
   try {
     const { email, password, userType } = req.body;
     logger.info(`/login: User logging in with email : ${email}`);
-
     const { token, refreshToken } = await AuthController.login({
       email,
       password,

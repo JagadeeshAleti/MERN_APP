@@ -35,8 +35,6 @@ export const HttpClient = {
     });
   },
 
-  getAll: () => {},
-
   get: async (subUrl) => {
     return withRefreshToken(async () => {
       const token = localStorage.getItem("token");

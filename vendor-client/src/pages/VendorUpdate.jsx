@@ -60,6 +60,7 @@ const VendorUpdate = () => {
         <TextField
           fullWidth
           color="primary"
+          label="Name"
           onChange={(e) => {
             setError();
             setVendor({ name: e.target.value, phoneNo: vendor.phoneNo });
@@ -72,6 +73,7 @@ const VendorUpdate = () => {
         <TextField
           fullWidth
           color="primary"
+          label="Phone"
           onChange={(e) => {
             setError();
             setVendor({ name: vendor.name, phoneNo: e.target.value });

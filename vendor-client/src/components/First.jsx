@@ -6,7 +6,7 @@ const First = () => {
     <Grid
       container
       item
-      mt={10}
+      m={"auto"}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -23,7 +23,7 @@ const First = () => {
         Welcome to the dashboard
       </Typography>
 
-      <Typography variant="h6" mt={5} fontWeight={"bold"}>
+      <Typography variant="h6" mt={5} fontWeight={"bold"} textAlign={"center"}>
         You can view and edit Venor details
       </Typography>
     </Grid>

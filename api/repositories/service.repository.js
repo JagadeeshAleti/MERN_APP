@@ -2,10 +2,11 @@ const Service = require("../models/Service");
 const logger = require("../utils/logger");
 
 module.exports.ServiceRepository = {
-  createService: async ({ service }) => {
+  createService: async ({ service, photo }) => {
     logger.info(`creating a service.....`);
     const newService = new Service({
       service,
+      photo,
     });
     return await newService.save();
   },
@@ -29,9 +30,9 @@ module.exports.ServiceRepository = {
     return null;
   },
 
-  updateServiceById: async (id, { service }) => {
+  updateServiceById: async (id, { service, photo }) => {
     logger.info(`updating service in db...`);
-    await Service.findByIdAndUpdate(id, { service });
+    await Service.findByIdAndUpdate(id, { service, photo });
     return Service.findById(id);
   },
 

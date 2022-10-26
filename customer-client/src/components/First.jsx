@@ -15,7 +15,7 @@ const First = () => {
       }}
     >
       <Typography
-        variant="h3"
+        fontSize={"32px"}
         color="#00008B"
         fontWeight={"bold"}
         textAlign={"center"}
@@ -23,7 +23,7 @@ const First = () => {
         Welcome to the dashboard
       </Typography>
 
-      <Typography variant="h6" mt={5} fontWeight={"bold"}>
+      <Typography variant="h6" mt={5} fontWeight={"bold"} textAlign="center">
         We much need your satisfication :)
       </Typography>
     </Grid>
