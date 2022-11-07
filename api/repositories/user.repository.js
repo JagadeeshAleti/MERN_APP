@@ -22,6 +22,7 @@ module.exports.UserRepository = {
 
     const { password, ...userDetails } = user._doc;
     const subTypeDetails = await collection.model.find({ userID: user._id });
+    logger.info(`user found successfully with id ${id}`);
     return { ...userDetails, [collection.as]: subTypeDetails };
   },
 

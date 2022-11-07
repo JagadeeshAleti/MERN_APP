@@ -19,9 +19,6 @@ import { Box } from "@mui/system";
 
 const Services = () => {
   const [services, setServices] = useState([]);
-  const PF =
-    "https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/";
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +62,7 @@ const Services = () => {
   ) : (
     <Grid container>
       <ConfirmDialog />
-      <Grid item xs={12}>
+      <Grid container item xs={12} columnGap={2}>
         <Box sx={{ float: "right" }}>
           <Button
             variant="outlined"
@@ -74,8 +71,21 @@ const Services = () => {
             Create
           </Button>
         </Box>
-      </Grid>
 
+        <Box sx={{ float: "right" }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              confirmDialog("Are you sure want to logout?", () => {
+                localStorage.clear();
+                navigate("/login");
+              });
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Grid>
       <Grid container item xs={12} rowGap={2}>
         {services.map((service, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
@@ -88,15 +98,11 @@ const Services = () => {
                       height: 150,
                       width: 350,
                       maxHeight: { xs: 150, md: 175 },
-                      maxWidth: { xs: 350, md: 250 },
+                      maxWidth: { xs: 350, md: 375 },
                       objectFit: "cover",
                     }}
                     alt="The house from the offer."
-                    src={
-                      PF +
-                      service.photo +
-                      "?alt=media&token=c19f2d0a-f254-4391-b589-ef7ee3cad9f5"
-                    }
+                    src={service.photo}
                   ></Grid>
                   <Typography textAlign="center">{service.service}</Typography>
                 </CardContent>

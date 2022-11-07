@@ -38,13 +38,12 @@ const UpdateService = () => {
 
     if (file) {
       const data = new FormData();
-      const fileName = Date.now() + file.name;
+      const fileName = file.name;
       data.append("name", fileName);
       data.append("file", file);
-      newService.photo = fileName;
-      console.log(newService);
       try {
-        await HttpClient.post("upload", data);
+        const res = await HttpClient.post("upload", data);
+        newService.photo = res.data.imgUrl;
       } catch (err) {}
     }
 

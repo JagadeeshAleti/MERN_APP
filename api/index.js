@@ -6,6 +6,7 @@ const cookieparser = require("cookie-parser");
 const Multer = require("multer");
 const FirebaseStorage = require("multer-firebase-storage");
 
+const CircularJSON = require("circular-json");
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -34,18 +35,6 @@ mongoose
   .then(console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "images");
-//   },
-//   filename: (req, file, cb) => {
-//     console.log(req.body);
-//     cb(null, req.body.name);
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-
 const multer = Multer({
   storage: FirebaseStorage({
     bucketName: process.env.FIREBASE_BUCKET_NAME,
@@ -62,8 +51,9 @@ app.post(
   [verifyToken(UserType.ADMIN), multer.single("file")],
   (req, res) => {
     logger.info("uploading imagee.....");
-    console.log(req.body);
-    res.status(200).send(`image uploaded successfully!!`);
+    res.status(200).json({
+      imgUrl: `https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/${req.file.originalname}?alt=media`,
+    });
   }
 );
 

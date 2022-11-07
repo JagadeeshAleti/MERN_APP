@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Card,
   CardContent,
   Typography,
@@ -7,21 +8,24 @@ import {
   CardActionArea,
   CardActions,
   Grid,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
 } from "@mui/material";
 
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
+
+import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
 const Services = () => {
   const [services, setServices] = useState([]);
-  const [vendors, setVednors] = useState([]);
-  const [selectedVendor, setSelectedVendor] = useState("");
-  const PF = "http://localhost:5001/images/";
+  //const [vendors, setVednors] = useState([]);
+  //const [selectedVendor, setSelectedVendor] = useState([]);
+
+  const PF =
+    "https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/";
+  const navigate = useNavigate();
 
   useEffect(() => {
     init();
@@ -31,16 +35,17 @@ const Services = () => {
 
   const fetchServices = async () => {
     const services = await HttpClient.get(`services`);
-    const vendors = await HttpClient.get(`vendor`);
-    setVednors(vendors);
+    //const vendors = await HttpClient.get(`vendor`);
+    //setVednors(vendors);
     setServices(services);
   };
 
-  const handleChange = (event) => {
-    setSelectedVendor(event.target.value);
-  };
+  // const handleChange = (event, index) => {
+  //   const currentSelectedVendor = [...selectedVendor];
+  //   currentSelectedVendor[index] = event.target.value;
+  //   setSelectedVendor(currentSelectedVendor);
+  // };
 
-  console.log(selectedVendor);
   return services.length === 0 ? (
     <Grid>
       <Typography
@@ -58,7 +63,23 @@ const Services = () => {
     </Grid>
   ) : (
     <Grid container>
-      <Grid container item xs={12}>
+      <ConfirmDialog />
+      <Grid container item xs={12} columnGap={2}>
+        <Box sx={{ float: "right" }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              confirmDialog("Are you sure want to logout?", () => {
+                localStorage.clear();
+                navigate("/login");
+              });
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Grid>
+      <Grid container item xs={12} rowGap={2}>
         {services.map((service, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card>
@@ -74,7 +95,11 @@ const Services = () => {
                       objectFit: "cover",
                     }}
                     alt="The house from the offer."
-                    src={PF + service.photo}
+                    src={
+                      PF +
+                      service.photo +
+                      "?alt=media&token=c19f2d0a-f254-4391-b589-ef7ee3cad9f5"
+                    }
                   ></Grid>
                   <Grid item xs={12}>
                     <Typography textAlign="center">
@@ -86,20 +111,24 @@ const Services = () => {
                       <InputLabel id="demo-select-small">
                         Select Vendor
                       </InputLabel>
-                      <Select
+                      {/* <Select
                         size="small"
                         labelId="demo-select-small"
                         id="demo-select-small"
-                        value={selectedVendor}
+                        value={selectedVendor[index] || ""}
                         label="Select Vendor"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, index)}
                       >
                         {vendors.map((vendor) => (
-                          <MenuItem key={vendor._id} value={vendor.name}>
+                          <MenuItem
+                            key={vendor._id}
+                            value={vendor.name}
+                            id={vendor.name}
+                          >
                             {vendor.name}
                           </MenuItem>
                         ))}
-                      </Select>
+                      </Select> */}
                     </FormControl>
                   </Grid>
                 </CardContent>
