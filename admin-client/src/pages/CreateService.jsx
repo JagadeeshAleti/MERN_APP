@@ -13,28 +13,32 @@ import { useNavigate } from "react-router-dom";
 
 const CreateService = () => {
   const [service, setService] = useState("");
-  const [file, setFile] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const [creatingService, setCreatingService] = useState(false);
 
   const navigate = useNavigate();
+
+  const uploadImage = async (e) => {
+    const img = e.target.files[0];
+    if (img) {
+      const data = new FormData();
+      const fileName = img.name;
+      data.append("name", fileName);
+      data.append("file", img);
+      try {
+        const res = await HttpClient.post("upload", data);
+        setPhoto(res.data.imgUrl);
+      } catch (err) {}
+    }
+  };
 
   const onSubmitHandler = async () => {
     setCreatingService(true);
     const newService = {
       service,
+      photo,
     };
-
-    if (file) {
-      const data = new FormData();
-      const fileName = file.name;
-      data.append("name", fileName);
-      data.append("file", file);
-      try {
-        const res = await HttpClient.post("upload", data);
-        newService.photo = res.data.imgUrl;
-      } catch (err) {}
-    }
-    console.log(newService);
+    console.log("New service is : ", service);
     const res = await HttpClient.post(`services/create`, newService);
     res && navigate("/admin/services");
   };
@@ -69,7 +73,9 @@ const CreateService = () => {
           fullWidth
           color="primary"
           label="Upload image"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => {
+            uploadImage(e);
+          }}
           variant="outlined"
           type="file"
           InputLabelProps={{

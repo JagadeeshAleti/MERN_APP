@@ -14,7 +14,7 @@ import { HttpClient } from "../http/http";
 
 const UpdateService = () => {
   const [service, setService] = useState("");
-  const [file, setFile] = useState(null);
+  const [photo, setPhoto] = useState(null);
   const [updatingService, setIsUpdatingService] = useState(false);
 
   const navigate = useNavigate();
@@ -29,30 +29,33 @@ const UpdateService = () => {
     setService(service.service);
   };
 
-  const onSubmitHandler = async () => {
-    setIsUpdatingService(true);
-
-    const newService = {
-      service,
-    };
-
-    if (file) {
+  const uploadImage = async (e) => {
+    const img = e.target.files[0];
+    if (img) {
       const data = new FormData();
-      const fileName = file.name;
+      const fileName = img.name;
       data.append("name", fileName);
-      data.append("file", file);
+      data.append("file", img);
       try {
         const res = await HttpClient.post("upload", data);
-        newService.photo = res.data.imgUrl;
+        setPhoto(res.data.imgUrl);
       } catch (err) {}
     }
+  };
 
+  const onSubmitHandler = async () => {
+    setIsUpdatingService(true);
+    const updateService = {
+      service,
+      photo,
+    };
     const updatedService = await HttpClient.put(
       `services/${params.id}`,
-      newService
+      updateService
     );
     updatedService && navigate("/admin/services");
   };
+
   return (
     <Grid container item sm={6} m="auto" mt={"10%"} rowGap={2}>
       <Grid item xs={12}>
@@ -85,7 +88,9 @@ const UpdateService = () => {
           fullWidth
           color="primary"
           label="Upload image"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => {
+            uploadImage(e);
+          }}
           variant="outlined"
           type="file"
           InputLabelProps={{
