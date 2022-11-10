@@ -9,15 +9,24 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Box,
 } from "@mui/material";
 
-import {
-  Visibility as VisibilityIcon,
-  Update as UpdateIcon,
-} from "@mui/icons-material";
-import { Box } from "@mui/system";
+import { Visibility as VisibilityIcon } from "@mui/icons-material";
+import DesignServicesTwoToneIcon from "@mui/icons-material/DesignServicesTwoTone";
 
 const drawerWidth = 240;
+
+const routes = [
+  {
+    text: "Profile",
+    route: "/vendor/view",
+  },
+  {
+    text: "Services",
+    route: "/vendor/services",
+  },
+];
 
 export const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -29,9 +38,9 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
-  const handleClick = () => {
+  const handleClick = (route) => {
     onDrawerClose();
-    onClick();
+    onClick(route);
   };
   return (
     <Drawer
@@ -73,14 +82,19 @@ export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
 
       <Divider />
       <List>
-        {["Profile"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {routes.map((route, index) => (
+          <ListItem key={route.text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <VisibilityIcon /> : <UpdateIcon />}
+                {index % 2 === 0 ? (
+                  <VisibilityIcon />
+                ) : (
+                  <DesignServicesTwoToneIcon />
+                )}
               </ListItemIcon>
-              <Button onClick={handleClick}>
-                <ListItemText primary={text} />
+
+              <Button onClick={() => handleClick(route)}>
+                <ListItemText primary={route.text} />
               </Button>
             </ListItemButton>
           </ListItem>

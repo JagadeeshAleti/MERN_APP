@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VendorView from "./pages/VendorView";
+import Service from "./pages/Service";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/home" element={<First />} />
               <Route path="/vendor/view" element={<VendorView />} />
               <Route path="/vendor/update" element={<VendorUpdate />} />
+              <Route path="/vendor/services" element={<Service />} />
             </Route>
           </Route>
 

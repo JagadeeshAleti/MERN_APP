@@ -92,7 +92,7 @@ const Services = () => {
               <CardActions>
                 <Grid item xs={12}>
                   <Button variant="outlined" color="primary" fullWidth>
-                    Book Service
+                    Provide Service
                   </Button>
                 </Grid>
               </CardActions>

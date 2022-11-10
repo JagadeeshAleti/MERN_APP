@@ -53,7 +53,6 @@ const Services = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          textDecoration: "underline",
         }}
       >
         Loading your services.....
@@ -62,7 +61,7 @@ const Services = () => {
   ) : (
     <Grid container>
       <ConfirmDialog />
-      <Grid container item xs={12} columnGap={2}>
+      <Grid item xs={12}>
         <Box sx={{ float: "right" }}>
           <Button
             variant="outlined"
@@ -70,11 +69,9 @@ const Services = () => {
           >
             Create
           </Button>
-        </Box>
-
-        <Box sx={{ float: "right" }}>
           <Button
             variant="outlined"
+            color="error"
             onClick={() => {
               confirmDialog("Are you sure want to logout?", () => {
                 localStorage.clear();

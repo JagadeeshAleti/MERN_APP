@@ -21,8 +21,8 @@ const Home = () => {
     setOpen(!open);
   };
 
-  const onButtonClick = () => {
-    navigate("/vendor/view");
+  const onButtonClick = (item) => {
+    navigate(item.route);
   };
 
   return (

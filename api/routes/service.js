@@ -24,7 +24,7 @@ router.post("/create", verifyToken(UserType.ADMIN), async (req, res) => {
 //get all services
 router.get(
   "/",
-  verifyToken(UserType.ADMIN, UserType.CUSTOMER),
+  verifyToken(UserType.ADMIN, UserType.CUSTOMER, UserType.VENDOR),
   async (req, res) => {
     try {
       logger.info(`/: fetching all services`);
