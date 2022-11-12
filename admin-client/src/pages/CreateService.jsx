@@ -26,7 +26,7 @@ const CreateService = () => {
       data.append("name", fileName);
       data.append("file", img);
       try {
-        const res = await HttpClient.post("upload", data);
+        const res = await HttpClient.post("uploadImg", data);
         setPhoto(res.data.imgUrl);
       } catch (err) {}
     }

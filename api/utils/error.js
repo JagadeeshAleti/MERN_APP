@@ -12,6 +12,13 @@ module.exports.ErrorHandler = {
         code: Errors.NOT_AUTHORISED,
       };
     }
+    if(err.message === Errors.TOKEN_REQUIRED) {
+      return {
+        status: 499,
+        message: "Token required",
+        code: Errors.TOKEN_REQUIRED,
+      };
+    }
     if (err.message === Errors.TOKEN_EXPIRED) {
       return {
         status: 401,

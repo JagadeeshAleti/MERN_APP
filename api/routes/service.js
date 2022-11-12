@@ -56,7 +56,7 @@ router.get(
 );
 
 //get service by id
-router.get("/:id", verifyToken(UserType.ADMIN), async (req, res) => {
+router.get("/:id", verifyToken(UserType.ADMIN, UserType.VENDOR), async (req, res) => {
   const id = req.params.id;
   try {
     logger.info(`/:${id} fetching service ....`);

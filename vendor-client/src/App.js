@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VendorView from "./pages/VendorView";
 import Service from "./pages/Service";
+import ProvideService from "./pages/ProvideService";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/vendor/view" element={<VendorView />} />
               <Route path="/vendor/update" element={<VendorUpdate />} />
               <Route path="/vendor/services" element={<Service />} />
+              <Route path="/vendor/service/provide/:id" element={<ProvideService />} />
             </Route>
           </Route>
 

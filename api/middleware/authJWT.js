@@ -8,6 +8,7 @@ const verifyToken = (...types) => {
   return async (req, res, next) => {
     try {
       const header = _.get(req, "headers.authorization");
+      logger.info(`Header is : ${header}`)
       if (header) {
         logger.info("decoding token.......");
         let decode;
@@ -31,7 +32,7 @@ const verifyToken = (...types) => {
         }
         throw new Error("NOT_AUTHORISED");
       } else {
-        throw new Error("NOT_AUTHORISED");
+        throw new Error("TOKEN_REQUIRED");
       }
     } catch (err) {
       const r = ErrorHandler.handle(err);
