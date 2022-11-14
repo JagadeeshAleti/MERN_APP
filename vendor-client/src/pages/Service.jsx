@@ -91,7 +91,12 @@ const Services = () => {
                             </CardActionArea>
                             <CardActions>
                                 <Grid item xs={12}>
-                                    <Button variant="outlined" color="primary" fullWidth onClick={() => navigate(`/vendor/service/provide/${service._id}`)}>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        fullWidth
+                                        onClick={() => navigate(`/vendor/service/provide/${service._id}`)}
+                                    >
                                         Provide Service
                                     </Button>
                                 </Grid>

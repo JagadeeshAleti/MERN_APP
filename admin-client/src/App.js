@@ -10,34 +10,30 @@ import AdminUpdate from "./pages/AdminUpdate";
 import Services from "./pages/Services";
 import UpdateService from "./pages/UpdateService";
 import CreateService from "./pages/CreateService";
+import Requests from "./pages/Requests";
 
 function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />}>
-              <Route path="/home" element={<First />} />
-              <Route path="/admin/view" element={<AdminView />} />
-              <Route path="/admin/update" element={<AdminUpdate />} />
-              <Route path="/admin/services" element={<Services />} />
-              <Route
-                path="/admin/service/update/:id"
-                element={<UpdateService />}
-              />
-              <Route
-                path="/admin/service/new_service"
-                element={<CreateService />}
-              />
-            </Route>
-          </Route>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/" element={<Home />}>
+                            <Route path="/home" element={<First />} />
+                            <Route path="/admin/view" element={<AdminView />} />
+                            <Route path="/admin/update" element={<AdminUpdate />} />
+                            <Route path="/admin/services" element={<Services />} />
+                            <Route path="/admin/service/update/:id" element={<UpdateService />} />
+                            <Route path="/admin/service/new_service" element={<CreateService />} />
+                            <Route path="/admin/service/requests" element={<Requests />} />
+                        </Route>
+                    </Route>
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;

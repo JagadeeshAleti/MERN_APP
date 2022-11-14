@@ -10,19 +10,10 @@ const serviceProviderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    price: {
-        type: String
-    },
-    startTime: {
-        type: String
-    },
-    endTime: {
-        type: String
-    },
-    approved: {
-        type: Boolean,
-        default: false
-    }
+    price: { type: String },
+    startTime: { type: String },
+    endTime: { type: String },
+    status: { type: String, default: "waitng for approval"}
 })
 
 module.exports = mongoose.model("ServiceProvider", serviceProviderSchema)

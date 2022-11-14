@@ -26,9 +26,8 @@ router.post(
     [verifyToken(UserType.ADMIN), multer.single("file")],
     (req, res) => {
         logger.info("Inside uploadImg route");
-        res.status(200).json({
-            imgUrl: `https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/${req.file.originalname}?alt=media`,
-        });
+        const imgUrl = `https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/${req.file.originalname}?alt=media`;
+        res.status(200).json({imgUrl});
     }
 );
 

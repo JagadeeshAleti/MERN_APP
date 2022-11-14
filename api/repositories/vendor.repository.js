@@ -19,6 +19,11 @@ module.exports.VendorRepository = {
     return vendorUsers[0];
   },
 
+  getVendorByID: async (id) => {
+    logger.info("Getting vendor info by id");
+    return await Vendor.findById(id);
+  },
+
   getAllVednors: async () => {
     logger.info("Getting vendors info.....");
     return await Vendor.find();

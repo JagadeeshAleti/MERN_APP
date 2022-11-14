@@ -1,16 +1,16 @@
-import { Alert, Button, Grid, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { HttpClient } from '../http/http'
+import { Alert, Button, Grid, Stack, TextField, Typography } from '@mui/material'
 
 const ProvideService = () => {
     const [service, setService] = useState("")
-    const [openTime, setOpenTIme] = useState('')
-    const [closeTime, setCloseTime] = useState('')
+    const [openTime, setOpenTIme] = useState('00:00')
+    const [closeTime, setCloseTime] = useState('00:00')
     const [price, setPrice] = useState('')
     const [error, setError] = useState("")
 
+    const navigate = useNavigate()
     const params = useParams()
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const ProvideService = () => {
     }
 
     const submitHandler = async () => {
-        if (price % price !== 0) {
+        if (price != 0 && price % price !== 0) {
             setError('Please enter valid price')
             return
         }
@@ -35,10 +35,9 @@ const ProvideService = () => {
         const endTime = ((h % 12 ? h % 12 : 12) + ":" + m + (h >= 12 ? 'PM' : 'AM'));
 
         let serviceProvider = { serviceId: service._id, price, startTime, endTime }
-
         const res = await HttpClient.post('serviceProvider', serviceProvider)
         res.data.error && setError(res.data.error)
-        console.log("res : ", res);
+        res && !res.data.error && navigate('/vendor/services')
     }
 
     return (
