@@ -43,7 +43,7 @@ const Requests = () => {
                     alignItems: "center",
                 }}
             >
-                There is no current requests.....
+                Loading requests, please wait a moment...
             </Typography>
         </Grid>
     ) : (
@@ -105,7 +105,7 @@ const Requests = () => {
                             <CardActions>
                                 <Grid item container xs={12}>
                                     <Grid item xs={6}>
-                                        <Button sx={{ width: '95%' }} variant="outlined" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "approve")} >
+                                        <Button sx={{ width: '95%' }} variant="outlined" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "accepted")} >
                                             Approve
                                         </Button>
                                     </Grid>

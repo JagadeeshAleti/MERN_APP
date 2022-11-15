@@ -1,14 +1,5 @@
 import React from "react";
-import {
-    Box,
-    Card,
-    CardContent,
-    Typography,
-    Button,
-    CardActionArea,
-    CardActions,
-    Grid,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +15,8 @@ const Services = () => {
         init();
     }, []);
 
-    const init = () => fetchServices();
-
-    const fetchServices = async () => {
-        const services = await HttpClient.get(`services`);
+    const init = async () => {
+        const services = await HttpClient.get(`services/service/vendors`);
         setServices(services);
     };
 
@@ -71,17 +60,14 @@ const Services = () => {
                             <CardActionArea>
                                 <CardContent>
                                     <Grid
+                                        m={"auto"}
+                                        borderRadius={1}
                                         component="img"
-                                        sx={{
-                                            height: 150,
-                                            width: 350,
-                                            maxHeight: { xs: 150, md: 175 },
-                                            maxWidth: { xs: 350, md: 375 },
-                                            objectFit: "cover",
-                                        }}
+                                        sx={{ height: 150, width: "100%", objectFit: "cover" }}
                                         alt="The house from the offer."
                                         src={service.photo}
-                                    ></Grid>
+                                    >
+                                    </Grid>
                                     <Grid item xs={12}>
                                         <Typography textAlign="center">
                                             {service.service}

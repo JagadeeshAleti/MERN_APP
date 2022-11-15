@@ -1,27 +1,36 @@
 const { ServiceRepository } = require("../repositories/service.repository");
 
 module.exports.ServiceController = {
-  createService: async ({ service, photo }) => {
-    return await ServiceRepository.createService({ service, photo });
-  },
+    createService: async ({ service, photo }) => {
+        return await ServiceRepository.createService({ service, photo });
+    },
 
-  getAllServices: async () => {
-    return await ServiceRepository.getAllServices();
-  },
+    getAllServices: async () => {
+        return await ServiceRepository.getAllServices();
+    },
 
-  getDeletedService: async () => {
-    return await ServiceRepository.getDeletedService();
-  },
+    getServicesForVednors: async () => {
+        return await ServiceRepository.getServicesForVednors()
+    },
 
-  getServiceById: async (id) => {
-    return await ServiceRepository.getServiceById(id);
-  },
+    getServicesForCustomers: async () => {
+        return await ServiceRepository.getServicesForCustomers()
+    },
+    
 
-  updateServiceById: async (id, { service, photo }) => {
-    return await ServiceRepository.updateServiceById(id, { service, photo });
-  },
+    getDeletedService: async () => {
+        return await ServiceRepository.getDeletedService();
+    },
 
-  deleteServiceById: async (id) => {
-    return await ServiceRepository.deleteServiceById(id);
-  },
+    getServiceById: async (id) => {
+        return await ServiceRepository.getServiceById(id);
+    },
+
+    updateServiceById: async (id, { service, photo }) => {
+        return await ServiceRepository.updateServiceById(id, { service, photo });
+    },
+
+    deleteServiceById: async (id) => {
+        return await ServiceRepository.deleteServiceById(id);
+    },
 };

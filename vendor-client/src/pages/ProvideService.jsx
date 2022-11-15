@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { HttpClient } from '../http/http'
-import { Alert, Button, Grid, Stack, TextField, Typography } from '@mui/material'
+import { Box, Alert, Button, Grid, Stack, TextField, Typography, LinearProgress } from '@mui/material'
 
 const ProvideService = () => {
-    const [service, setService] = useState("")
-    const [openTime, setOpenTIme] = useState('00:00')
-    const [closeTime, setCloseTime] = useState('00:00')
-    const [price, setPrice] = useState('')
-    const [error, setError] = useState("")
+    const [service, setService] = useState("");
+    const [openTime, setOpenTIme] = useState('00:00');
+    const [closeTime, setCloseTime] = useState('00:00');
+    const [price, setPrice] = useState('');
+    const [error, setError] = useState("");
+    const [sentRequest, setSentRequest] = useState(false)
 
     const navigate = useNavigate()
     const params = useParams()
@@ -23,6 +24,7 @@ const ProvideService = () => {
     }
 
     const submitHandler = async () => {
+        setSentRequest(true)
         if (price != 0 && price % price !== 0) {
             setError('Please enter valid price')
             return
@@ -36,8 +38,11 @@ const ProvideService = () => {
 
         let serviceProvider = { serviceId: service._id, price, startTime, endTime }
         const res = await HttpClient.post('serviceProvider', serviceProvider)
-        res.data.error && setError(res.data.error)
-        res && !res.data.error && navigate('/vendor/services')
+
+        if (res) {
+            setSentRequest(false)
+            navigate('/vendor/services')
+        }
     }
 
     return (
@@ -96,6 +101,13 @@ const ProvideService = () => {
                 <Button variant='contained' fullWidth onClick={submitHandler}>
                     SUBMIT
                 </Button>
+            </Grid>
+            <Grid item xs={12}>
+                {sentRequest && (
+                    <Box sx={{ width: "100%" }}>
+                        <LinearProgress />
+                    </Box>
+                )}
             </Grid>
             <Grid item xs={12}>
                 {error && (

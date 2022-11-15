@@ -1,21 +1,15 @@
-const ServiceProvider = require("../models/ServiceProvider")
-const logger = require("../utils/logger")
-const { ServiceRepository } = require("./service.repository")
-const { VendorRepository } = require("./vendor.repository")
+const logger = require("../utils/logger");
+const ServiceProvider = require("../models/ServiceProvider");
+const { ServiceRepository } = require("./service.repository");
+const { VendorRepository } = require("./vendor.repository");
 
 module.exports.ServiceProviderRepository = {
     provideService: async (serviceId, vendorId, { price, startTime, endTime }) => {
-        logger.info('creating a new service provider entry....')
-        const record = await ServiceProvider.find({ serviceId, vendorId })
-        if (record.length === 1) {
-            return {
-                error: "You are alredy providing this service, for more details contact admin"
-            }
-        }
+        logger.info('creating a new service provider entry....');
         const provider = new ServiceProvider({
             serviceId, vendorId, price, startTime, endTime
         })
-        return await provider.save()
+        return await provider.save();
     },
 
     getAllServiceProviders: async () => {

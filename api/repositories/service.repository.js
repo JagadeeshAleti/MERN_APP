@@ -1,44 +1,68 @@
 const Service = require("../models/Service");
+const ServiceProvider = require("../models/ServiceProvider");
 const logger = require("../utils/logger");
+const { type } = require("../validation-schema/register-validation-schema");
 
 module.exports.ServiceRepository = {
-  createService: async ({ service, photo }) => {
-    logger.info(`creating a service.....`);
-    const newService = new Service({
-      service,
-      photo,
-    });
-    return await newService.save();
-  },
+    createService: async ({ service, photo }) => {
+        logger.info(`creating a service.....`);
+        const newService = new Service({
+            service,
+            photo,
+        });
+        return await newService.save();
+    },
 
-  getAllServices: async () => {
-    logger.info(`fetching all services from db...`);
-    return await Service.find({ isDeleted: false });
-  },
+    getAllServices: async () => {
+        logger.info(`fetching all services from db...`);
+        return await Service.find({ isDeleted: false });
+    },
 
-  getDeletedService: async () => {
-    logger.info(`fetching deleted services from db...`);
-    return await Service.find({ isDeleted: true });
-  },
+    getServicesForVednors: async () => {
+        logger.info('fetching services for the vendors...')
+        const acceptedServices = await ServiceProvider.find({ status: { $in: ["accepted", "waitng for approval"] } });
+        let acceptedSIds = acceptedServices.map(a => a.serviceId.toString());
+        const allServices = await Service.find({ isDeleted: false });
+        let filteredService = allServices.filter(s => {
+            return !acceptedSIds.includes(s._id.toString());
+        })
+        return filteredService;
+    },
 
-  getServiceById: async (id) => {
-    logger.info(`fetching services with id ${id}`);
-    const service = await Service.findById(id);
-    if (service.isDeleted === false) {
-      return service;
-    }
-    return null;
-  },
+    getServicesForCustomers: async () => {
+        logger.info(`fetching services for the customers`);
+        const acceptedServices = await ServiceProvider.find({ status: "accepted" });
+        let acceptedSIds = acceptedServices.map(a => a.serviceId.toString());
+        const allServices = await Service.find({ isDeleted: false });
+        let filteredService = allServices.filter(s => {
+            return acceptedSIds.includes(s._id.toString());
+        })
+        return filteredService;
+    },
 
-  updateServiceById: async (id, { service, photo }) => {
-    logger.info(`updating service in db...`);
-    await Service.findByIdAndUpdate(id, { service, photo });
-    return Service.findById(id);
-  },
+    getDeletedService: async () => {
+        logger.info(`fetching deleted services from db...`);
+        return await Service.find({ isDeleted: true });
+    },
 
-  deleteServiceById: async (id) => {
-    logger.info(`deleting service ...`);
-    await Service.findByIdAndUpdate(id, { isDeleted: true });
-    return await Service.findById(id);
-  },
+    getServiceById: async (id) => {
+        logger.info(`fetching services with id ${id}`);
+        const service = await Service.findById(id);
+        if (service.isDeleted === false) {
+            return service;
+        }
+        return null;
+    },
+
+    updateServiceById: async (id, { service, photo }) => {
+        logger.info(`updating service in db...`);
+        await Service.findByIdAndUpdate(id, { service, photo });
+        return Service.findById(id);
+    },
+
+    deleteServiceById: async (id) => {
+        logger.info(`deleting service ...`);
+        await Service.findByIdAndUpdate(id, { isDeleted: true });
+        return await Service.findById(id);
+    },
 };
