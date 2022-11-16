@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { HttpClient } from '../http/http'
-import { Box, Alert, Button, Grid, Stack, TextField, Typography, LinearProgress } from '@mui/material'
+import { Box, Button, Grid, TextField, Typography, LinearProgress } from '@mui/material'
 
 const ProvideService = () => {
     const [service, setService] = useState("");
     const [openTime, setOpenTIme] = useState('00:00');
     const [closeTime, setCloseTime] = useState('00:00');
     const [price, setPrice] = useState('');
-    const [error, setError] = useState("");
     const [sentRequest, setSentRequest] = useState(false)
 
     const navigate = useNavigate()
@@ -25,10 +24,6 @@ const ProvideService = () => {
 
     const submitHandler = async () => {
         setSentRequest(true)
-        if (price != 0 && price % price !== 0) {
-            setError('Please enter valid price')
-            return
-        }
 
         let [h, m] = openTime.split(":")
         const startTime = ((h % 12 ? h % 12 : 12) + ":" + m + (h >= 12 ? 'PM' : 'AM'));
@@ -65,10 +60,8 @@ const ProvideService = () => {
                     color="primary"
                     label="Price"
                     variant="outlined"
-                    onChange={(e) => {
-                        setError('')
-                        setPrice(e.target.value)
-                    }}
+                    type={'number'}
+                    onChange={(e) => setPrice(e.target.value)}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -107,15 +100,6 @@ const ProvideService = () => {
                     <Box sx={{ width: "100%" }}>
                         <LinearProgress />
                     </Box>
-                )}
-            </Grid>
-            <Grid item xs={12}>
-                {error && (
-                    <Stack sx={{ width: "100%" }} spacing={2}>
-                        <Alert icon={false} variant="filled" severity="error">
-                            {error}
-                        </Alert>
-                    </Stack>
                 )}
             </Grid>
         </Grid>

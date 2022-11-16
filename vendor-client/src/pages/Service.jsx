@@ -1,11 +1,12 @@
 import React from "react";
-import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
+import jwt from "jsonwebtoken";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
-
 import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
+
+import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
 
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -16,7 +17,10 @@ const Services = () => {
     }, []);
 
     const init = async () => {
-        const services = await HttpClient.get(`services/service/vendors`);
+        const token = localStorage.getItem("token");
+        const {refUserID: vendorId} = { ...jwt.decode(token) };
+        console.log(typeof vendorId);
+        const services = await HttpClient.get(`services/vendor/${vendorId}`);
         setServices(services);
     };
 

@@ -1,4 +1,6 @@
+
 const router = require("express").Router();
+const mongoose = require('mongoose');
 const logger = require("../utils/logger");
 
 const verifyToken = require("../middleware/authJWT");
@@ -70,10 +72,12 @@ router.get("/:id", verifyToken(UserType.ADMIN, UserType.VENDOR), async (req, res
 });
 
 //get services for the vendor
-router.get("/service/vendors", verifyToken(UserType.VENDOR), async (req, res) => {
+router.get("/vendor/:id", verifyToken(UserType.VENDOR), async (req, res) => {
+    logger.info(`fetching services for vendors....`);
+    const vendorId = mongoose.Types.ObjectId(req.params.id)
+    console.log("Vendor id is : ", vendorId);
     try {
-        logger.info(`fetching services for vendors....`);
-        const services = await ServiceController.getServicesForVednors();
+        const services = await ServiceController.getServicesForVednors(vendorId);
         res.status(200).json(services);
     } catch (err) {
         logger.error(err.message);

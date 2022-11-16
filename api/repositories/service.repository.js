@@ -17,9 +17,9 @@ module.exports.ServiceRepository = {
         return await Service.find({ isDeleted: false });
     },
 
-    getServicesForVednors: async () => {
-        logger.info('fetching services for the vendors...')
-        const acceptedServices = await ServiceProvider.find({ status: { $in: ["accepted", "waitng for approval"] } });
+    getServicesForVednors: async (id) => {
+        logger.info('fetching services for the vendor...')
+        const acceptedServices = await ServiceProvider.find({ vendorId: id, status: { $in: ["accepted", "waitng for approval"] } });
         let acceptedSIds = acceptedServices.map(a => a.serviceId.toString());
         const allServices = await Service.find({ isDeleted: false });
         let filteredService = allServices.filter(s => {
@@ -33,8 +33,8 @@ module.exports.ServiceRepository = {
         const acceptedServices = await ServiceProvider.find({ status: "accepted" });
         const p = acceptedServices.map(async (s) => {
             const service = await Service.findById(s.serviceId);
-            const vendor = await ServiceProvider.find({serviceId: s.serviceId});
-            return {service, vendor};
+            const vendor = await ServiceProvider.find({ serviceId: s.serviceId });
+            return { service, vendor };
         })
         const r = Promise.all(p);
         return r;

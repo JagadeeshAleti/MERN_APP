@@ -9,8 +9,8 @@ module.exports.ServiceController = {
         return await ServiceRepository.getAllServices();
     },
 
-    getServicesForVednors: async () => {
-        return await ServiceRepository.getServicesForVednors()
+    getServicesForVednors: async (id) => {
+        return await ServiceRepository.getServicesForVednors(id)
     },
 
     getServicesForCustomers: async () => {
