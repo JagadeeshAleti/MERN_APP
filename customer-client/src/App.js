@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import First from "./components/First";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomerUpdate from "./pages/CustomerUpdate";
 import Home from "./pages/Home";

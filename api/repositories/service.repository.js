@@ -31,12 +31,11 @@ module.exports.ServiceRepository = {
     getServicesForCustomers: async () => {
         logger.info(`fetching services for the customers`);
         const acceptedServices = await ServiceProvider.find({ status: "accepted" });
-        const p = acceptedServices.map(async (s) => {
+        const res = acceptedServices.map(async s => {
             const service = await Service.findById(s.serviceId);
-            const vendor = await ServiceProvider.find({ serviceId: s.serviceId });
-            return { service, vendor };
+            return {service,  vendor: s};
         })
-        const r = Promise.all(p);
+        const r = Promise.all(res);
         return r;
     },
 

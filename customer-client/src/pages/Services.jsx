@@ -82,7 +82,7 @@ const Services = () => {
                                                 <Typography>Open Time</Typography>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor[0].startTime')}</Typography>
+                                                <Typography align="right">{_.get(service, 'vendor.startTime')}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid container item xs={12}>
@@ -90,7 +90,7 @@ const Services = () => {
                                                 <Typography>Close Time</Typography>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor[0].endTime')}</Typography>
+                                                <Typography align="right">{_.get(service, 'vendor.endTime')}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid container item xs={12}>
@@ -98,7 +98,7 @@ const Services = () => {
                                                 <Typography>Price</Typography>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor[0].price') + "$"}</Typography>
+                                                <Typography align="right">{_.get(service, 'vendor.price') + "$"}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
