@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />}>
-              <Route path="/home" element={<First />} />
+              <Route path="/home" element={<Services />} />
               <Route path="/customer/view" element={<CustomerView />} />
               <Route path="/customer/update" element={<CustomerUpdate />} />
               <Route path="/customer/services" element={<Services />} />

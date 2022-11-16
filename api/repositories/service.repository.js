@@ -1,7 +1,6 @@
 const Service = require("../models/Service");
 const ServiceProvider = require("../models/ServiceProvider");
 const logger = require("../utils/logger");
-const { type } = require("../validation-schema/register-validation-schema");
 
 module.exports.ServiceRepository = {
     createService: async ({ service, photo }) => {
@@ -32,12 +31,13 @@ module.exports.ServiceRepository = {
     getServicesForCustomers: async () => {
         logger.info(`fetching services for the customers`);
         const acceptedServices = await ServiceProvider.find({ status: "accepted" });
-        let acceptedSIds = acceptedServices.map(a => a.serviceId.toString());
-        const allServices = await Service.find({ isDeleted: false });
-        let filteredService = allServices.filter(s => {
-            return acceptedSIds.includes(s._id.toString());
+        const p = acceptedServices.map(async (s) => {
+            const service = await Service.findById(s.serviceId);
+            const vendor = await ServiceProvider.find({serviceId: s.serviceId});
+            return {service, vendor};
         })
-        return filteredService;
+        const r = Promise.all(p);
+        return r;
     },
 
     getDeletedService: async () => {

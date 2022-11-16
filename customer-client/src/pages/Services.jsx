@@ -1,5 +1,5 @@
 import React from "react";
-
+import _ from 'lodash';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
@@ -19,7 +19,7 @@ const Services = () => {
         const services = await HttpClient.get(`services/service/customers`);
         setServices(services);
     };
-
+    console.log(services);
     return services.length === 0 ? (
         <Grid>
             <Typography
@@ -59,19 +59,48 @@ const Services = () => {
                         <Card>
                             <CardActionArea>
                                 <CardContent>
-                                    <Grid
-                                        m={"auto"}
-                                        borderRadius={1}
-                                        component="img"
-                                        sx={{ height: 150, width: "100%", objectFit: "cover" }}
-                                        alt="The house from the offer."
-                                        src={service.photo}
-                                    >
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Typography textAlign="center">
-                                            {service.service}
-                                        </Typography>
+                                    <Grid container item xs={12} rowGap={2}>
+                                        <Grid
+                                            m={"auto"}
+                                            borderRadius={1}
+                                            component="img"
+                                            sx={{ height: 150, width: "100%", objectFit: "cover" }}
+                                            alt="The house from the offer."
+                                            src={service.service.photo}
+                                        >
+                                        </Grid>
+                                        <Grid container item xs={12} height={"25px"}>
+                                            <Grid item xs={4}>
+                                                <Typography > Service Name</Typography>
+                                            </Grid>
+                                            <Grid item xs={8} >
+                                                <Typography align="right">{_.get(service, 'service.service')}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container item xs={12}>
+                                            <Grid item xs={6}>
+                                                <Typography>Open Time</Typography>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography align="right">{_.get(service, 'vendor[0].startTime')}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container item xs={12}>
+                                            <Grid item xs={6}>
+                                                <Typography>Close Time</Typography>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography align="right">{_.get(service, 'vendor[0].endTime')}</Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container item xs={12}>
+                                            <Grid item xs={6}>
+                                                <Typography>Price</Typography>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <Typography align="right">{_.get(service, 'vendor[0].price') + "$"}</Typography>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                 </CardContent>
                             </CardActionArea>
