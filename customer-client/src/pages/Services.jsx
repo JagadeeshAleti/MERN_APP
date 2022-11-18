@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
 import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
-import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
+import { Box, Typography, Button, Grid, } from "@mui/material";
 
 const Services = () => {
-    const [services, setServices] = useState([]);
+    const [names, setNames] = useState([])
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,11 +16,11 @@ const Services = () => {
     }, []);
 
     const init = async () => {
-        const services = await HttpClient.get(`services/service/customers`);
-        setServices(services);
+        const services = await HttpClient.get(`services/activeServices/customers`);
+        setNames([...new Set(services.map(s => { return s.service.service }))])
     };
-    console.log(services);
-    return services.length === 0 ? (
+
+    return names.length === 0 ? (
         <Grid>
             <Typography
                 sx={{
@@ -54,68 +54,14 @@ const Services = () => {
                 </Box>
             </Grid>
             <Grid container item xs={12} rowGap={2}>
-                {services.map((service, index) => (
+                {names.map((n, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card>
-                            <CardActionArea>
-                                <CardContent>
-                                    <Grid container item xs={12} rowGap={2}>
-                                        <Grid
-                                            m={"auto"}
-                                            borderRadius={1}
-                                            component="img"
-                                            sx={{ height: 150, width: "100%", objectFit: "cover" }}
-                                            alt="The house from the offer."
-                                            src={service.service.photo}
-                                        >
-                                        </Grid>
-                                        <Grid container item xs={12} height={"25px"}>
-                                            <Grid item xs={4}>
-                                                <Typography > Service Name</Typography>
-                                            </Grid>
-                                            <Grid item xs={8} >
-                                                <Typography align="right">{_.get(service, 'service.service')}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container item xs={12}>
-                                            <Grid item xs={6}>
-                                                <Typography>Open Time</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor.startTime')}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container item xs={12}>
-                                            <Grid item xs={6}>
-                                                <Typography>Close Time</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor.endTime')}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container item xs={12}>
-                                            <Grid item xs={6}>
-                                                <Typography>Price</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor.price') + "$"}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Grid item xs={12}>
-                                    <Button variant="outlined" color="primary" fullWidth>
-                                        Book Service
-                                    </Button>
-                                </Grid>
-                            </CardActions>
-                        </Card>
+                        <Button onClick={() => { navigate(`/customer/service/${n}`) }}>{n}</Button>
                     </Grid>
                 ))}
             </Grid>
         </Grid>
+
     );
 };
 

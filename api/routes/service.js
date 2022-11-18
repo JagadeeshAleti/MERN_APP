@@ -87,7 +87,7 @@ router.get("/vendor/:id", verifyToken(UserType.VENDOR), async (req, res) => {
 });
 
 //get services for the vendor
-router.get("/service/customers", verifyToken(UserType.CUSTOMER), async (req, res) => {
+router.get("/activeServices/customers", verifyToken(UserType.CUSTOMER, UserType.VENDOR), async (req, res) => {
     try {
         logger.info(`fetching services for customers....`);
         const services = await ServiceController.getServicesForCustomers();

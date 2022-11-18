@@ -5,11 +5,15 @@ module.exports.serviceProviderController = {
         return await ServiceProviderRepository.provideService(serviceId, vendorId, { price, startTime, endTime })
     },
 
+    getServiceProviderById: async(id) => {
+        return await ServiceProviderRepository.getServiceProviderById(id);
+    },
+
     getAllServiceProviders: async () => {
         return await ServiceProviderRepository.getAllServiceProviders();
     },
 
-    updateServiceProvider: async (id, {status}) => {
-        return await ServiceProviderRepository.updateServiceProvider(id, {status})
+    updateServiceProvider: async (id, body) => {
+        return await ServiceProviderRepository.updateServiceProvider(id, body)
     }
 }

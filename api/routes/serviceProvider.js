@@ -27,13 +27,28 @@ router.post('', verifyToken(UserType.VENDOR), async (req, res) => {
     }
 })
 
+//get service request by id
+router.get('/:id', verifyToken(UserType.VENDOR), async (req, res) => { 
+    logger.info('inside get service provider route');
+    const id = new mongo.ObjectId(req.params.id);
+    try {
+        const result = await serviceProviderController.getServiceProviderById(id);
+        res.status(201).json(result);
+    } catch (err) {
+        logger.error(err.message);
+        const r = ErrorHandler.handle(err);
+        res.status(r.status).json(r);
+    }
+
+})
+
 //get all service requests
 router.get('', verifyToken(UserType.ADMIN), async (req, res) => {
     logger.info('get all the requests for admin')
     try {
         const result = await serviceProviderController.getAllServiceProviders();
         res.status(201).json(result)
-    }catch (err) {
+    } catch (err) {
         logger.error(err.message);
         const r = ErrorHandler.handle(err);
         res.status(r.status).json(r);
@@ -41,14 +56,15 @@ router.get('', verifyToken(UserType.ADMIN), async (req, res) => {
 })
 
 //update a service request by id
-router.put('/:id', verifyToken(UserType.ADMIN), async (req, res) => {
-    logger.info('admin updating the request status')
+router.put('/:id', verifyToken(UserType.ADMIN, UserType.VENDOR), async (req, res) => {
+    logger.info('inside updating service provider route')
     const id = req.params.id;
-    const {status} = req.body
+    const body = req.body
+    console.log("Body is : ", body);
     try {
-        const updatedReq = await serviceProviderController.updateServiceProvider(id, {status})
+        const updatedReq = await serviceProviderController.updateServiceProvider(id, body)
         res.status(201).json(updatedReq)
-    } catch(err) {
+    } catch (err) {
         logger.error(err.message);
         const r = ErrorHandler.handle(err);
         res.status(r.status).json(r);

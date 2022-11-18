@@ -12,6 +12,10 @@ module.exports.ServiceProviderRepository = {
         return await provider.save();
     },
 
+    getServiceProviderById: async (id) => {
+        return await ServiceProvider.findById(id);
+    },
+
     getAllServiceProviders: async () => {
         logger.info('fetching all service request....');
         const serviceProvider = await ServiceProvider.find({ status: 'waitng for approval' });
@@ -26,12 +30,10 @@ module.exports.ServiceProviderRepository = {
         return result;
     },
 
-    updateServiceProvider: async (id, { status }) => {
+    updateServiceProvider: async (id, body) => {
         logger.info('updating the request.....');
-        await ServiceProvider.findByIdAndUpdate(id, { status });
-        !status ?
-            logger.info('the status of the requst is not modified') :
-            logger.info(`admin ${status} your request`)
+        await ServiceProvider.findByIdAndUpdate(id, body);
+        logger.info('Service provider updated successfully')
         return await ServiceProvider.findById(id);
     }
 }

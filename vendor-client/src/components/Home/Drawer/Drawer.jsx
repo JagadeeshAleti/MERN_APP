@@ -1,30 +1,29 @@
 import React from "react";
 import { Button, styled, Typography } from "@mui/material";
 
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Box,
-} from "@mui/material";
+import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Box, } from "@mui/material";
 
 import { Visibility as VisibilityIcon } from "@mui/icons-material";
 import DesignServicesTwoToneIcon from "@mui/icons-material/DesignServicesTwoTone";
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const routes = [
   {
     text: "Profile",
     route: "/vendor/view",
+    icon: <VisibilityIcon />
   },
   {
-    text: "Services",
+    text: "Active Services",
+    route: "/vendor/avtive-services",
+    icon: <AccessibilityIcon />
+  },
+  {
+    text: "Request Services",
     route: "/vendor/services",
+    icon: <DesignServicesTwoToneIcon />
   },
 ];
 
@@ -86,14 +85,10 @@ export const CustomDrawer = ({ open, onDrawerClose, onClick }) => {
           <ListItem key={route.text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? (
-                  <VisibilityIcon />
-                ) : (
-                  <DesignServicesTwoToneIcon />
-                )}
+                {route.icon}
               </ListItemIcon>
 
-              <Button onClick={() => handleClick(route)}>
+              <Button onClick={() => handleClick(route)}  >
                 <ListItemText primary={route.text} />
               </Button>
             </ListItemButton>

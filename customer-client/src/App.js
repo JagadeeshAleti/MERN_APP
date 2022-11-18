@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CustomerView from "./pages/CustomerView";
 import Services from "./pages/Services";
+import ServiceByName from "./pages/ServiceByName";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/customer/view" element={<CustomerView />} />
               <Route path="/customer/update" element={<CustomerUpdate />} />
               <Route path="/customer/services" element={<Services />} />
+              <Route path='/customer/service/:serviceName' element={<ServiceByName />} />
             </Route>
           </Route>
 
