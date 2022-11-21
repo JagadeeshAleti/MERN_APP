@@ -44,10 +44,10 @@ const ActiveServices = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid container item xs={12} rowGap={2}>
+            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={6} md={4} key={_.get(service, 'vendor._id')}>
-                        <Card>
+                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'vendor._id')}>
+                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
@@ -102,7 +102,7 @@ const ActiveServices = () => {
                                 <Grid item container xs={12}>
                                     <Grid item xs={12}>
                                         <Button fullWidth
-                                            variant="outlined"
+                                            variant="contained"
                                             color="primary"
                                             onClick={() => {
                                                 navigate(`/vendor/service/editService/${_.get(service, 'vendor._id')}`)

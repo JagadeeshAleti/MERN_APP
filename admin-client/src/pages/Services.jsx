@@ -52,7 +52,7 @@ const Services = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid item xs={12}>
+            <Grid item xs={12} m={1}>
                 <Box sx={{ float: "right" }}>
                     <Button
                         variant="outlined"
@@ -60,24 +60,12 @@ const Services = () => {
                     >
                         Create
                     </Button>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => {
-                            confirmDialog("Are you sure want to logout?", () => {
-                                localStorage.clear();
-                                navigate("/login");
-                            });
-                        }}
-                    >
-                        Logout
-                    </Button>
                 </Box>
             </Grid>
-            <Grid container item xs={12}>
+            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card>
+                    <Grid item xs={12} sm={5} md={3} key={index}>
+                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid
@@ -98,7 +86,7 @@ const Services = () => {
                                     <Grid item xs={6}>
                                         <Button
                                             sx={{ width: '95%' }}
-                                            variant="outlined"
+                                            variant="contained"
                                             color="secondary"
                                             onClick={() => editService(service._id)}
                                         >
@@ -108,7 +96,7 @@ const Services = () => {
                                     <Grid item xs={6}>
                                         <Button
                                             sx={{ float: 'right', width: '95%' }}
-                                            variant="outlined"
+                                            variant="contained"
                                             color="error"
                                             onClick={() => {
                                                 confirmDialog("Do you want to delete service?", () =>

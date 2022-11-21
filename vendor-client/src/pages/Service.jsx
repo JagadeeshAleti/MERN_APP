@@ -18,7 +18,7 @@ const Services = () => {
 
     const init = async () => {
         const token = localStorage.getItem("token");
-        const {refUserID: vendorId} = { ...jwt.decode(token) };
+        const { refUserID: vendorId } = { ...jwt.decode(token) };
         console.log(typeof vendorId);
         const services = await HttpClient.get(`services/vendor/${vendorId}`);
         setServices(services);
@@ -41,26 +41,10 @@ const Services = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid item xs={12} columnGap={2}>
-                <Box sx={{ float: "right" }}>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => {
-                            confirmDialog("Are you sure want to logout?", () => {
-                                localStorage.clear();
-                                navigate("/login");
-                            });
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </Box>
-            </Grid>
-            <Grid container item xs={12} rowGap={2}>
+            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card>
+                    <Grid item xs={12} sm={5} md={3} key={index}>
+                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid
@@ -82,7 +66,7 @@ const Services = () => {
                             <CardActions>
                                 <Grid item xs={12}>
                                     <Button
-                                        variant="outlined"
+                                        variant="contained"
                                         color="primary"
                                         fullWidth
                                         onClick={() => navigate(`/vendor/service/provide/${service._id}`)}

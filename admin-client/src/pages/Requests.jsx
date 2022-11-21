@@ -49,10 +49,10 @@ const Requests = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid container item xs={12} rowGap={2}>
+            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={6} md={4} key={_.get(service, 'request._id')}>
-                        <Card>
+                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'request._id')}>
+                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
@@ -105,12 +105,12 @@ const Requests = () => {
                             <CardActions>
                                 <Grid item container xs={12}>
                                     <Grid item xs={6}>
-                                        <Button sx={{ width: '95%' }} variant="outlined" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "accepted")} >
+                                        <Button sx={{ width: '95%' }} variant="contained" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "accepted")} >
                                             Approve
                                         </Button>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Button sx={{ float: 'right', width: '95%' }} variant="outlined" color="error" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "decline")} >
+                                        <Button sx={{ float: 'right', width: '95%' }} variant="contained" color="error" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "decline")} >
                                             Decline
                                         </Button>
                                     </Grid>

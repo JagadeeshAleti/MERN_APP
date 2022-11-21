@@ -37,22 +37,7 @@ const Services = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid item xs={12} columnGap={2}>
-                <Box sx={{ float: "right" }}>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => {
-                            confirmDialog("Are you sure want to logout?", () => {
-                                localStorage.clear();
-                                navigate("/login");
-                            });
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </Box>
-            </Grid>
+
             <Grid container item xs={12} rowGap={2}>
                 {names.map((n, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>

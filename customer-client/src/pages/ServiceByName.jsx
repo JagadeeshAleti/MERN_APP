@@ -27,10 +27,8 @@ const ServiceByName = () => {
     };
 
     const onSubmitHandler = (id, decision) => {
-        confirmDialog(`Are you sure want to ${decision} the service?`, async () => {
-            console.log(id, decision);
-            const res = await HttpClient.put(`serviceProvider/${id}`, { status: decision })
-            res && window.location.reload()
+        confirmDialog(`Are you sure want to book this service?`, async () => {
+
         });
     };
 
@@ -52,10 +50,10 @@ const ServiceByName = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid container item xs={12} rowGap={2}>
+            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent={'center'}>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={6} md={4} key={_.get(service, 'vendor._id')}>
-                        <Card>
+                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'vendor._id')}>
+                        <Card style={{ boxShadow: '0 0 5px teal' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
@@ -109,11 +107,11 @@ const ServiceByName = () => {
                             <CardActions>
                                 <Grid item container xs={12}>
                                     <Grid item xs={12}>
-                                        <Button fullWidth variant="outlined" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "accepted")} >
+                                        <Button fullWidth variant="contained" color="primary" onClick={onSubmitHandler} >
                                             Book Service
                                         </Button>
                                     </Grid>
-                                    
+
                                 </Grid>
                             </CardActions>
                         </Card>
