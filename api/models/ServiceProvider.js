@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { required } = require('../validation-schema/register-validation-schema')
 
 const serviceProviderSchema = new mongoose.Schema({
     serviceId: {

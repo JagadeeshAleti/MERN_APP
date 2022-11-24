@@ -38,6 +38,7 @@ const EditActiveService = () => {
         if (modifier === 'PM') {
             hours = parseInt(hours, 10) + 12;
         }
+        console.log(`${hours}:${minutes}`);
         return `${hours}:${minutes}`;
     };
 
@@ -60,7 +61,7 @@ const EditActiveService = () => {
     }
 
     return (
-        <Grid container item xs={12} sm={6} m="auto" mt={'5%'} rowGap={3}>
+        <Grid container item xs={12} sm={6} m="auto" mt={5} rowGap={3}>
             <Grid item xs={12}>
                 <Typography
                     sx={{
@@ -107,7 +108,7 @@ const EditActiveService = () => {
                     type={"time"}
                     color="primary"
                     label="Close time"
-                    value={closeTime}
+                    value={closeTime.length === 4 ? `0${closeTime}` : closeTime}
                     variant="outlined"
                     onChange={(e) => setCloseTime(e.target.value)}
                     InputLabelProps={{
@@ -129,6 +130,8 @@ const EditActiveService = () => {
                     }}
                 />
             </Grid>
+
+
             <Grid item xs={12}>
                 <Button variant='contained' fullWidth onClick={submitHandler}>
                     SUBMIT

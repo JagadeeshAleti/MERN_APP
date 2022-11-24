@@ -2,6 +2,7 @@ const logger = require("../utils/logger");
 const ServiceProvider = require("../models/ServiceProvider");
 const { ServiceRepository } = require("./service.repository");
 const { VendorRepository } = require("./vendor.repository");
+const Product = require("../models/Product");
 
 module.exports.ServiceProviderRepository = {
     provideService: async (serviceId, vendorId, { price, startTime, endTime }) => {
@@ -24,7 +25,8 @@ module.exports.ServiceProviderRepository = {
             const requestDetails = await ServiceProvider.findById(_id).lean();
             const serviceDetails = await ServiceRepository.getServiceById(serviceId);
             const vendorDetails = await VendorRepository.getVendorByID(vendorId);
-            return { request: requestDetails, service: serviceDetails, vendor: vendorDetails };
+            const productDetails = await Product.find({ serviceId, vendorId });
+            return { request: requestDetails, service: serviceDetails, vendor: vendorDetails, product: productDetails };
         })
         const result = await Promise.all(p);
         return result;

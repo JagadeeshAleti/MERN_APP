@@ -7,13 +7,14 @@ const cookieparser = require("cookie-parser");
 const dotenv = require("dotenv");
 
 //routes
-const uploadImg = require('./routes/uploadImg')
+const uploadImg = require('./routes/uploadImg');
+const productRoute = require('./routes/product');
 const authRoute = require("./routes/auth");
 const serviceRoute = require("./routes/service");
 const vendorRoute = require("./routes/vendor");
 const adminRoute = require("./routes/admin");
 const customerRoute = require("./routes/customer");
-const serviceProvider = require('./routes/serviceProvider')
+const serviceProvider = require('./routes/serviceProvider');
 
 const app = express();
 dotenv.config();
@@ -29,6 +30,7 @@ mongoose
     .catch((err) => console.log(err));
 
 app.use("/api/uploadImg", uploadImg)
+app.use("/api/product", productRoute);
 app.use("/api/user", authRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/vendor", vendorRoute);
