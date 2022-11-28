@@ -5,14 +5,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { ConfirmDialog, confirmDialog } from "../../../pages/ConfirmDialog";
+import { confirmDialog } from "../../../pages/ConfirmDialog";
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Button, styled, Typography } from "@mui/material";
 
 const drawerWidth = 270;
 
 const routes = [
     { text: "Profile", route: "/vendor/view", icon: <VisibilityIcon /> },
-    { text: "Active Services", route: "/vendor/avtive-services", icon: <AccessibilityIcon /> },
+    { text: "Active Services", route: "/vendor/active-services", icon: <AccessibilityIcon /> },
     { text: "Request Services", route: "/vendor/services", icon: <DesignServicesIcon /> },
     { text: 'Logout', route: "/login", icon: <PowerSettingsNewIcon /> }
 ];

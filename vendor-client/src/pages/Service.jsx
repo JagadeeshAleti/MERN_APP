@@ -4,9 +4,8 @@ import jwt from "jsonwebtoken";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
-import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
-import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
+import { Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
 
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -40,7 +39,6 @@ const Services = () => {
         </Grid>
     ) : (
         <Grid container>
-            <ConfirmDialog />
             <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service, index) => (
                     <Grid item xs={12} sm={5} md={3} key={index}>

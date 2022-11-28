@@ -1,16 +1,13 @@
-import _ from 'lodash'
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { HttpClient } from '../http/http'
 import { Box, Button, Grid, TextField, Typography, LinearProgress } from '@mui/material'
 
 const EditActiveService = () => {
-    const [price, setPrice] = useState('');
     const [openTime, setOpenTime] = useState('');
     const [closeTime, setCloseTime] = useState('');
-    const [phoneNo, setPhoneNo] = useState('')
-    const [sentRequest, setSentRequest] = useState()
-
+    const [phoneNo, setPhoneNo] = useState('');
+    const [sentRequest, setSentRequest] = useState(false);
 
     const navigate = useNavigate()
     const params = useParams()
@@ -20,12 +17,10 @@ const EditActiveService = () => {
     }, [params.id])
 
     const fetchService = async () => {
-        const res = await HttpClient.get(`serviceProvider/${params.id}`)
-        console.log(res);
-        setPrice(res.price)
-        setPhoneNo(res.phoneNo)
-        setOpenTime(convertTime12to24(res.startTime))
-        setCloseTime(convertTime12to24(res.endTime))
+        const res = await HttpClient.get(`serviceProvider/${params.id}`);
+        setPhoneNo(res.phoneNo);
+        setOpenTime(convertTime12to24(res.startTime));
+        setCloseTime(convertTime12to24(res.endTime));
     }
 
     const convertTime12to24 = time12hr => {
@@ -38,7 +33,6 @@ const EditActiveService = () => {
         if (modifier === 'PM') {
             hours = parseInt(hours, 10) + 12;
         }
-        console.log(`${hours}:${minutes}`);
         return `${hours}:${minutes}`;
     };
 
@@ -51,12 +45,12 @@ const EditActiveService = () => {
         [h, m] = closeTime.split(":")
         const endTime = ((h % 12 ? h % 12 : 12) + ":" + m + (h >= 12 ? 'PM' : 'AM'));
 
-        let body = { price, startTime, endTime, phoneNo, status: 'waitng for approval' }
+        let body = { startTime, endTime, phoneNo }
         const res = await HttpClient.put(`serviceProvider/${params.id}`, body)
 
         if (res) {
             setSentRequest(false)
-            navigate('/vendor/avtive-services')
+            navigate('/vendor/active-services')
         }
     }
 
@@ -73,20 +67,6 @@ const EditActiveService = () => {
                 >
                     Edit Request Details
                 </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    fullWidth
-                    color="primary"
-                    value={price}
-                    label="Price"
-                    variant="outlined"
-                    type={'number'}
-                    onChange={(e) => setPrice(e.target.value)}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
             </Grid>
             <Grid item xs={12}>
                 <TextField
@@ -130,8 +110,6 @@ const EditActiveService = () => {
                     }}
                 />
             </Grid>
-
-
             <Grid item xs={12}>
                 <Button variant='contained' fullWidth onClick={submitHandler}>
                     SUBMIT

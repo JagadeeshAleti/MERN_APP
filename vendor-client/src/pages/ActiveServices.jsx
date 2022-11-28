@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
-import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
 import { Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
 
@@ -26,7 +25,7 @@ const ActiveServices = () => {
         const filter = services.filter(s => _.get(s, 'vendor.vendorId') === vendorId)
         setServices(filter)
     };
-
+    console.log(services);
     return services.length === 0 ? (
         <Grid>
             <Typography
@@ -43,7 +42,6 @@ const ActiveServices = () => {
         </Grid>
     ) : (
         <Grid container>
-            <ConfirmDialog />
             <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
                 {services.map((service) => (
                     <Grid item xs={12} sm={5} md={3} key={_.get(service, 'vendor._id')}>
@@ -86,31 +84,31 @@ const ActiveServices = () => {
                                                 <Typography align="right">{_.get(service, 'vendor.endTime')}</Typography>
                                             </Grid>
                                         </Grid>
-                                        <Grid container item xs={12}>
-                                            <Grid item xs={6}>
-                                                <Typography>Price</Typography>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor.price') + "$"}</Typography>
-                                            </Grid>
-                                        </Grid>
-
                                     </Grid>
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
                                 <Grid item container xs={12}>
-                                    <Grid item xs={12}>
-                                        <Button fullWidth
+                                    <Grid item xs={6}>
+                                        <Button sx={{ width: '95%' }}
                                             variant="contained"
                                             color="primary"
                                             onClick={() => {
                                                 navigate(`/vendor/service/editService/${_.get(service, 'vendor._id')}`)
                                             }} >
-                                            Edit Details
+                                            Edit
                                         </Button>
                                     </Grid>
-
+                                    <Grid item xs={6}>
+                                        <Button sx={{ float: 'right', width: '95%' }}
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => {
+                                                navigate(`/vendor/service/${_.get(service, 'service._id')}/products`)
+                                            }} >
+                                            Products
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </CardActions>
                         </Card>
