@@ -9,14 +9,14 @@ const serviceProviderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    price: {
-        type: String
-    },
     startTime: {
         type: String
     },
     endTime: {
         type: String
+    },
+    phoneNo: {
+        type: Number
     },
     status: {
         type: String,
@@ -26,9 +26,6 @@ const serviceProviderSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    phoneNo: {
-        type: Number
-    }
 })
 
 module.exports = mongoose.model("ServiceProvider", serviceProviderSchema)

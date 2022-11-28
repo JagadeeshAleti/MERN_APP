@@ -34,6 +34,7 @@ router.get('/:id', verifyToken(UserType.VENDOR), async (req, res) => {
     try {
         const id = new mongo.ObjectId(req.params.id);
         const product = await ProductController.getProductById(id);
+        logger.info(`product is : ${product}`)
         res.status(200).json(product);
     } catch (err) {
         logger.error(err.message);
@@ -57,7 +58,7 @@ router.get('/:serviceId/:vendorId', verifyToken(UserType.VENDOR), async (req, re
 })
 
 //update product by id
-router.put('/:id', verifyToken(UserType.VENDOR, UserType.ADMIN), async (req, res) => {
+router.put('/:id', verifyToken(UserType.VENDOR), async (req, res) => {
     logger.info(`inside update product route`)
     try {
         const product = await ProductController.updateProduct(req.params.id, req.body);

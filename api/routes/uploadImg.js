@@ -1,33 +1,32 @@
 const router = require('express').Router()
-const dotenv = require("dotenv");
-
-const Multer = require("multer");
-const verifyToken = require('../middleware/authJWT');
-const FirebaseStorage = require("multer-firebase-storage");
 
 const logger = require('../utils/logger');
+const verifyToken = require('../middleware/authJWT');
+
+const { ErrorHandler } = require('../utils/error');
 const { UserType } = require('../constants/user-types');
-
-dotenv.config()
-
-const multer = Multer({
-    storage: FirebaseStorage({
-        bucketName: process.env.FIREBASE_BUCKET_NAME,
-        credentials: {
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            privateKey: process.env.FIREBASE_PRIVATE_KEY,
-            projectId: process.env.FIREBASE_PROJECT_ID,
-        },
-    }),
-});
+const { StorageService } = require('../services/storage-service');
 
 router.post(
     "",
-    [verifyToken(UserType.ADMIN), multer.single("file")],
-    (req, res) => {
-        logger.info("Inside uploadImg route");
-        const imgUrl = `https://firebasestorage.googleapis.com/v0/b/mern-stack-service-app.appspot.com/o/${req.file.originalname}?alt=media`;
-        res.status(200).json({imgUrl});
+    [verifyToken(UserType.ADMIN)],
+    async (req, res) => {
+        logger.info('uploading an image....')
+        try {
+            if (!req.files) {
+                throw new Error("File is required to upload");
+            }
+            const file = req.files.file
+
+            //upload it to storage (S3/Filrebase)
+            const imgUrl = await StorageService.uploadFile(file);
+            imgUrl && logger.info('image uploaded successfully!!')
+            res.status(201).json({ imgUrl });
+        } catch (err) {
+            logger.error("Error is :", err.message);
+            const r = ErrorHandler.handle(err);
+            res.status(r.status).json(r);
+        }
     }
 );
 

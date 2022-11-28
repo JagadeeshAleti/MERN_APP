@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const cookieparser = require("cookie-parser");
+const fileupload = require("express-fileupload")
 
 const dotenv = require("dotenv");
 
@@ -22,6 +23,8 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.use(cookieparser());
+app.use(fileupload());
+
 
 
 mongoose
