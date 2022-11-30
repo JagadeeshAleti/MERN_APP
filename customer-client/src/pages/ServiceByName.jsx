@@ -5,11 +5,12 @@ import _ from 'lodash'
 import { HttpClient } from '../http/http'
 import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
-import { Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, } from "@mui/material";
+import { Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid, InputLabel, Select, MenuItem, FormControl } from "@mui/material";
 
 const ServiceByName = () => {
-    const [services, setServices] = useState([])
-
+    const [services, setServices] = useState([]);
+    const [product, setProduct] = useState('');
+    const [price, setPrice] = useState(null);
     const params = useParams()
     const navigate = useNavigate();
 
@@ -26,12 +27,18 @@ const ServiceByName = () => {
         setServices(filter)
     };
 
+    const onChangeHandler = (e) => {
+        const [name, price] = e.target.value.split(':');
+        console.log("Index is : ", name, price);
+        setPrice(price);
+        setProduct(e.target.value);
+    }
+
     const onSubmitHandler = (id, decision) => {
         confirmDialog(`Are you sure want to book this service?`, async () => {
 
         });
     };
-
     console.log(services);
     return services.length === 0 ? (
         <Grid>
@@ -50,18 +57,16 @@ const ServiceByName = () => {
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent={'center'}>
+            <Grid container item xs={12} rowGap={5}>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'vendor._id')}>
-                        <Card style={{ boxShadow: '0 0 5px teal' }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} p={2} key={_.get(service, 'vendor._id')}>
+                        <Card style={{ boxShadow: '0 0 10px 0px grey' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
                                         <Grid
-                                            m={"auto"}
-                                            borderRadius={1}
                                             component="img"
-                                            sx={{ height: 150, width: "100%", objectFit: "cover", boxShadow: "0px 0px 5px 0.5px teal" }}
+                                            sx={{ height: 300, width: "100%", objectFit: "cover" }}
                                             alt="The house from the offer."
                                             src={_.get(service, 'service.photo')}
                                         >
@@ -92,15 +97,32 @@ const ServiceByName = () => {
                                                 <Typography align="right">{_.get(service, 'vendor.endTime')}</Typography>
                                             </Grid>
                                         </Grid>
+
                                         <Grid container item xs={12}>
                                             <Grid item xs={6}>
                                                 <Typography>Price</Typography>
                                             </Grid>
                                             <Grid item xs={6}>
-                                                <Typography align="right">{_.get(service, 'vendor.price') + "$"}</Typography>
+                                                <Typography align="right">{product ? `${price}$` : "0$"}</Typography>
                                             </Grid>
                                         </Grid>
+                                        <Grid item xs={12}>
+                                            <FormControl fullWidth size="small">
+                                                <InputLabel id="demo-select-small">Products</InputLabel>
+                                                <Select
+                                                    labelId="demo-select-small"
+                                                    id="demo-select-small"
+                                                    value={product}
+                                                    label="Product"
+                                                    onChange={(e) => onChangeHandler(e)}
+                                                >
+                                                    {_.get(service, 'products').map((p, index) => <MenuItem key={p._id} value={`${p.name}:${p.price}`}>
+                                                        {p.name}
+                                                    </MenuItem>)}
 
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
                                     </Grid>
                                 </CardContent>
                             </CardActionArea>

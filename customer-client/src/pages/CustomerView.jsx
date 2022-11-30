@@ -18,9 +18,14 @@ const CustomerView = () => {
     const token = localStorage.getItem("token");
     const customerInfo = { ...jwt.decode(token) };
     const { refUserID } = customerInfo;
-    const user = await HttpClient.get(`customer/${refUserID}`);
-    console.log("User is : ", user);
-    setUser(user);
+    try {
+      const user = await HttpClient.get(`customer/${refUserID}`);
+      console.log("User is : ", user);
+      setUser(user);
+    } catch (err) {
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   return !user ? (

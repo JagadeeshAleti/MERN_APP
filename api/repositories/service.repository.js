@@ -1,3 +1,4 @@
+const Product = require("../models/Product");
 const Service = require("../models/Service");
 const ServiceProvider = require("../models/ServiceProvider");
 const logger = require("../utils/logger");
@@ -19,7 +20,8 @@ module.exports.ServiceRepository = {
 
     getServicesForVednors: async (id) => {
         logger.info('fetching services for the vendor...')
-        const acceptedServices = await ServiceProvider.find({ vendorId: id, status: { $in: ["accepted", "waitng for approval"] } });
+        //const acceptedServices = await ServiceProvider.find({ vendorId: id, status: { $in: ["accepted", "waitng for approval"] } });
+        const acceptedServices = await ServiceProvider.find({ vendorId: id, status: "accepted" });
         let acceptedSIds = acceptedServices.map(a => a.serviceId.toString());
         const allServices = await Service.find({ isDeleted: false });
         let filteredService = allServices.filter(s => {
@@ -33,7 +35,8 @@ module.exports.ServiceRepository = {
         const acceptedServices = await ServiceProvider.find({ status: "accepted" });
         const res = acceptedServices.map(async s => {
             const service = await Service.findById(s.serviceId);
-            return {service,  vendor: s};
+            const products = await Product.find({ serviceId: s.serviceId, vendorId: s.vendorId });
+            return { service, vendor: s, products };
         })
         const r = Promise.all(res);
         return r;

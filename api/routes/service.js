@@ -71,7 +71,7 @@ router.get("/:id", verifyToken(UserType.ADMIN, UserType.VENDOR), async (req, res
     }
 });
 
-//get services for the vendor
+//get accepted services for the vendor customer
 router.get("/vendor/:id", verifyToken(UserType.VENDOR), async (req, res) => {
     logger.info(`fetching services for vendors....`);
     const vendorId = mongoose.Types.ObjectId(req.params.id)
@@ -86,7 +86,7 @@ router.get("/vendor/:id", verifyToken(UserType.VENDOR), async (req, res) => {
     }
 });
 
-//get services for the vendor
+//get  accepted services for the customers
 router.get("/activeServices/customers", verifyToken(UserType.CUSTOMER, UserType.VENDOR), async (req, res) => {
     try {
         logger.info(`fetching services for customers....`);
@@ -98,7 +98,6 @@ router.get("/activeServices/customers", verifyToken(UserType.CUSTOMER, UserType.
         res.status(r.status).json(r);
     }
 });
-
 
 //update service by id
 router.put("/:id", verifyToken(UserType.ADMIN), async (req, res) => {

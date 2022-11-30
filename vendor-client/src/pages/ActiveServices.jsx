@@ -37,23 +37,21 @@ const ActiveServices = () => {
                     alignItems: "center",
                 }}
             >
-                Loading requests, please wait a moment...
+                Currently you don't have any active services....
             </Typography>
         </Grid>
     ) : (
         <Grid container>
-            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
+            <Grid container item xs={12} rowGap={5}>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'vendor._id')}>
-                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} p={2} key={_.get(service, 'vendor._id')}>
+                        <Card sx={{ boxShadow: '0 0 10px 0px grey' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
                                         <Grid
-                                            m={"auto"}
-                                            borderRadius={1}
                                             component="img"
-                                            sx={{ height: 150, width: "100%", objectFit: "cover", boxShadow: "0px 0px 5px 0.5px teal" }}
+                                            sx={{ height: 300, width: "100%", objectFit: "cover" }}
                                             alt="The house from the offer."
                                             src={_.get(service, 'service.photo')}
                                         >

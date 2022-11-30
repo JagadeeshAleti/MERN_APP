@@ -1,16 +1,8 @@
-import {
-    Grid,
-    TextField,
-    Button,
-    Typography,
-    Box,
-    LinearProgress,
-} from "@mui/material";
 import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { HttpClient } from "../http/http";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Grid, TextField, Button, Typography, Box, LinearProgress, } from "@mui/material";
 
 const UpdateService = () => {
     const [service, setService] = useState("");
@@ -29,6 +21,7 @@ const UpdateService = () => {
     const init = async () => {
         const service = await HttpClient.get(`services/${params.id}`);
         setService(service.service);
+        setPhoto(service.photo);
     };
 
     const uploadImage = async (e) => {

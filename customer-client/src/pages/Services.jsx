@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../http/http";
-import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
 
 import { Box, Typography, Button, Grid, } from "@mui/material";
 
@@ -36,8 +35,6 @@ const Services = () => {
         </Grid>
     ) : (
         <Grid container>
-            <ConfirmDialog />
-
             <Grid container item xs={12} rowGap={2}>
                 {names.map((n, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>

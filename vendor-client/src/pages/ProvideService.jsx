@@ -7,7 +7,7 @@ const ProvideService = () => {
     const [service, setService] = useState("");
     const [openTime, setOpenTIme] = useState('00:00');
     const [closeTime, setCloseTime] = useState('00:00');
-    const [price, setPrice] = useState('');
+    const [phoneNo, setPhoneNo] = useState(0);
     const [sentRequest, setSentRequest] = useState(false)
 
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ const ProvideService = () => {
         [h, m] = closeTime.split(":")
         const endTime = ((h % 12 ? h % 12 : 12) + ":" + m + (h >= 12 ? 'PM' : 'AM'));
 
-        let serviceProvider = { serviceId: service._id, price, startTime, endTime }
+        let serviceProvider = { serviceId: service._id, phoneNo, startTime, endTime }
         const res = await HttpClient.post('serviceProvider', serviceProvider)
 
         if (res) {
@@ -57,16 +57,6 @@ const ProvideService = () => {
             <Grid item xs={12}>
                 <TextField
                     fullWidth
-                    color="primary"
-                    label="Price"
-                    variant="outlined"
-                    type={'number'}
-                    onChange={(e) => setPrice(e.target.value)}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    fullWidth
                     type={"time"}
                     color="primary"
                     label="Start time"
@@ -88,6 +78,16 @@ const ProvideService = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    fullWidth
+                    color="primary"
+                    label="Mobile"
+                    variant="outlined"
+                    type={'number'}
+                    onChange={(e) => setPhoneNo(e.target.value)}
                 />
             </Grid>
             <Grid item xs={12}>

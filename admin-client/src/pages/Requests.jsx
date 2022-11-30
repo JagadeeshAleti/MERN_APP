@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { HttpClient } from "../http/http";
 import _ from 'lodash'
 
-import { useNavigate } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "./ConfirmDialog";
-import { Box, Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid } from "@mui/material";
+import { Card, CardContent, Typography, Button, CardActionArea, CardActions, Grid } from "@mui/material";
 
 const Requests = () => {
     const [services, setServices] = useState([]);
@@ -20,11 +19,10 @@ const Requests = () => {
         setServices(serviceRequests)
     };
 
-    const onSubmitHandler = (requestId, productId, decision) => {
+    const onSubmitHandler = (requestId, decision) => {
         confirmDialog(`Are you sure want to ${decision} the service?`, async () => {
-            console.log(requestId, productId, decision);
-            // const res = await HttpClient.put(`serviceProvider/${id}`, { status: decision })
-            // res && window.location.reload()
+            const res = await HttpClient.put(`serviceProvider/${requestId}`, { status: decision })
+            res && window.location.reload()
         });
     };
 
@@ -41,24 +39,22 @@ const Requests = () => {
                     alignItems: "center",
                 }}
             >
-                Loading requests, please wait a moment...
+                No requests from vendors...
             </Typography>
         </Grid>
     ) : (
         <Grid container>
             <ConfirmDialog />
-            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
+            <Grid container item xs={12} rowGap={5}>
                 {services.map((service) => (
-                    <Grid item xs={12} sm={5} md={3} key={_.get(service, 'request._id')}>
-                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} p={2} key={_.get(service, 'request._id')}>
+                        <Card sx={{ boxShadow: '0 0 10px 0px grey' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid container item xs={12} rowGap={2}>
                                         <Grid
-                                            m={"auto"}
-                                            borderRadius={1}
                                             component="img"
-                                            sx={{ height: 150, width: "100%", objectFit: "cover", boxShadow: "0px 0px 5px 0.5px teal" }}
+                                            sx={{ height: 300, width: "100%", objectFit: "cover" }}
                                             alt="The house from the offer."
                                             src={_.get(service, 'service.photo')}
                                         >
@@ -88,29 +84,18 @@ const Requests = () => {
                                                 <Typography align="right">{_.get(service, 'request.endTime')}</Typography>
                                             </Grid>
                                         </Grid>
-                                        {_.get(service, 'product').map(p =>
-                                            <Grid key={p} container item xs={12}>
-                                                <Grid item xs={6}>
-                                                    <Typography>{p.product}</Typography>
-                                                </Grid>
-                                                <Grid item xs={6}>
-                                                    <Typography align="right">{p.price}$</Typography>
-                                                </Grid>
-                                            </Grid>)
-
-                                        }
                                     </Grid>
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
                                 <Grid item container xs={12}>
                                     <Grid item xs={6}>
-                                        <Button sx={{ width: '95%' }} variant="contained" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), _.get(service, 'product[0]._id'), "accepted")} >
+                                        <Button sx={{ width: '95%' }} variant="contained" color="primary" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "accepted")} >
                                             Approve
                                         </Button>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Button sx={{ float: 'right', width: '95%' }} variant="contained" color="error" onClick={() => onSubmitHandler(_.get(service, 'request._id'), _.get(service, 'product[0]._id'), "decline")} >
+                                        <Button sx={{ float: 'right', width: '95%' }} variant="contained" color="error" onClick={() => onSubmitHandler(_.get(service, 'request._id'), "decline")} >
                                             Decline
                                         </Button>
                                     </Grid>

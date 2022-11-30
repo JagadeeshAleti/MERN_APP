@@ -26,6 +26,15 @@ const Products = () => {
 
     return products.length === 0 ? (
         <Grid>
+            <Grid item xs={12}>
+                <Button
+                    sx={{ float: "right" }}
+                    variant='contained'
+                    onClick={() => navigate(`/vendor/service/${params.serviceId}/product/create`)}
+                >
+                    Create
+                </Button>
+            </Grid>
             <Typography
                 sx={{
                     fontSize: 32,

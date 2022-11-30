@@ -9,9 +9,12 @@ import CustomerView from "./pages/CustomerView";
 import Services from "./pages/Services";
 import ServiceByName from "./pages/ServiceByName";
 
+import { ConfirmDialog } from "./pages/ConfirmDialog";
+
 function App() {
   return (
     <div className="App">
+      <ConfirmDialog />
       <BrowserRouter>
         <Routes>
           <Route element={<ProtectedRoute />}>

@@ -62,17 +62,16 @@ const Services = () => {
                     </Button>
                 </Box>
             </Grid>
-            <Grid container item xs={12} rowGap={5} columnGap={5} justifyContent='center'>
+            <Grid container item xs={12} rowGap={5}>
                 {services.map((service, index) => (
-                    <Grid item xs={12} sm={5} md={3} key={index}>
-                        <Card sx={{ boxShadow: '0 0 5px teal' }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} p={2} key={index}>
+                        <Card
+                            sx={{ boxShadow: '0 0 10px 0px grey' }}>
                             <CardActionArea>
                                 <CardContent>
                                     <Grid
-                                        m={"auto"}
-                                        borderRadius={1}
                                         component="img"
-                                        sx={{ height: 150, width: "100%", objectFit: "cover" }}
+                                        sx={{ height: 300, width: "100%", objectFit: "cover" }}
                                         alt="The house from the offer."
                                         src={service.photo}
                                     >
